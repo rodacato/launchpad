@@ -284,10 +284,12 @@
         -f allow_merge_commit=false \
         -f allow_rebase_merge=false \
         -f squash_merge_commit_title="PR_TITLE" \
-        -f squash_merge_commit_message="PR_BODY"
+        -f squash_merge_commit_message="PR_BODY" \
+        -f delete_branch_on_merge=true
       ```
       Options: squash (clean history, recommended), merge commit (preserves branch history),
       rebase (linear but keeps individual commits). Ask which they prefer.
+      `delete_branch_on_merge` auto-cleans merged branches — always enable this.
 - [ ] Protect the `main` branch (do this AFTER the first push — protection blocks direct pushes):
       ```
       gh api --method POST repos/{owner}/{repo}/rulesets \
