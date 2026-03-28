@@ -1,0 +1,38 @@
+# .notdefined.yml — metadata for rodacato/projects
+# Spec: https://github.com/rodacato/rodacato/blob/master/docs/guides/notdefined-yml-spec.md
+#
+# NOTE: This file is a template placeholder.
+# The agent will generate the real content during Phase 5 of START_HERE.md,
+# pulling values from docs/BRANDING.md, docs/ARCHITECTURE.md, and CLAUDE.md.
+
+tagline: "<!-- fill during START_HERE.md Phase 5 -->"
+description: >
+  <!-- 2-4 sentences. What it does, who it's for, why it exists.
+       Casual tone. First person or impersonal, never corporate. -->
+version: "0.1.0"
+
+# Uncomment when you have branding assets
+# icon: docs/branding/icon.svg
+# icon_dark: docs/branding/icon-dark.svg
+# background_color: "#000000"
+
+# Uncomment when you have screenshots
+# screenshot: docs/screenshots/notdefined.png
+# screenshots:
+#   - path: docs/screenshots/dashboard.png
+#     alt: "Description of what's shown"
+
+category: product       # product | utility
+status: active          # active | maintenance | paused
+lang: "<!-- Ruby | Python | JavaScript | ... -->"
+stack:
+  - "<!-- primary framework -->"
+  - "<!-- database -->"
+  - "<!-- other key libs -->"
+tags:
+  - "<!-- tag1 -->"
+  - "<!-- tag2 -->"
+  - "<!-- tag3 -->"
+
+repo: https://github.com/rodacato/<!-- repo-name -->
+# url: https://<!-- project -->.notdefined.dev
