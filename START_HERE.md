@@ -177,8 +177,10 @@
       and add any project-specific playbooks.
       Show the customized sections and wait for approval.
 - [ ] Scaffold the directory structure defined in `docs/ARCHITECTURE.md`:
-      create `src/` subdirectories, `tests/`, `docs/adr/`, `docs/specs/`,
-      and any other directories the architecture calls for.
+      Follow the directory layout from the Architecture doc exactly.
+      - Standard project → `src/`, `tests/`, `docs/adr/`, `docs/specs/`
+      - Monorepo → `apps/{app}/src/`, `apps/{app}/tests/`, `packages/`, etc.
+      - Do NOT create a root `tests/` directory if the architecture uses per-app testing
       Add `.gitkeep` to empty directories so git tracks them.
 
 ---
@@ -195,8 +197,6 @@
       gh project create --owner {org} --title "{Project Name}" --format board
       ```
       Link the project to the repo. This is where sprints, issues, and tasks are visualized.
-      After creating: update the `project-url` in `.github/workflows/add-to-project.yml`
-      with the actual project URL (e.g. `https://github.com/orgs/{org}/projects/1`).
 - [ ] Create labels that `docs/WORKFLOW.md` references (use `--force` to update if they already exist):
       ```
       gh label create "feature" --color "0E8A16" --description "New functionality" --force
@@ -213,32 +213,6 @@
       Use `.github/ISSUE_TEMPLATE/feature.md` as the format.
       Ask the human to confirm which items from the roadmap go into Sprint 1.
       Assign all issues to the milestone and add the `feature` label.
-- [ ] Remind the human to add required secrets (do NOT paste keys — just remind):
-      ```
-      Human: add this secret in Settings → Secrets → Actions → New secret:
-      - ADD_TO_PROJECT_PAT    — for auto-adding issues to the project board
-                                (classic PAT with `project` scope, or fine-grained with
-                                 org Projects read/write + repo Issues read)
-      ```
-- [ ] Protect the `main` branch (settings are NOT copied from templates):
-      ```
-      gh api --method POST repos/{owner}/{repo}/rulesets \
-        --input - <<'EOF'
-      {
-        "name": "Protect main",
-        "target": "branch",
-        "enforcement": "active",
-        "conditions": { "ref_name": { "include": ["refs/heads/main"], "exclude": [] } },
-        "rules": [
-          { "type": "pull_request", "parameters": { "required_approving_review_count": 0 } },
-          { "type": "non_fast_forward" }
-        ]
-      }
-      EOF
-      ```
-      This requires PRs to merge into main (no direct push) and blocks force pushes.
-      `required_approving_review_count: 0` means PRs are required but no approval needed
-      (useful for solo devs — the human can adjust this later in Settings → Rules).
 - [ ] Ask the human: "Do you want GitHub Pages enabled?"
       If yes, remind them to enable it manually (settings are NOT copied from templates):
       ```
@@ -252,7 +226,7 @@
       to add build steps.
       If no, remove `.github/workflows/pages.yml` and `docs/public/`.
 - [ ] Verify workflows are present:
-      check `.github/workflows/add-to-project.yml` and `.github/workflows/pages.yml` (if enabled) exist
+      check `.github/workflows/pages.yml` exists (if GitHub Pages was enabled)
 - [ ] Report to human: "GitHub setup complete. Moving to finalization."
 
 ---
@@ -282,8 +256,16 @@
       Ask the human for the security contact email.
       Show and approve.
 - [ ] **CODE_OF_CONDUCT.md** — Ask the human: "Do you want a Code of Conduct?"
-      If yes, generate Contributor Covenant (standard).
+      If yes, download the Contributor Covenant (do NOT generate it — use curl to avoid content filtering):
+      ```
+      curl -sL https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md -o CODE_OF_CONDUCT.md
+      ```
+      Review the contact method placeholder and ask the human for their preferred contact.
       If no, skip.
+- [ ] Update `CLAUDE.md` — sync the repository structure tree to match the actual layout.
+      The template structure may no longer match after Architecture decisions
+      (e.g., monorepo with `apps/` instead of `src/`). Run `tree -I node_modules -I .git`
+      and update the structure block in CLAUDE.md accordingly.
 - [ ] Update `README.md`:
       - Replace all placeholder sections with real content from the docs
       - Update the project structure tree to match the actual directory layout
@@ -294,7 +276,38 @@
 - [ ] Commit the initialization:
       `git add -A && git commit -m "chore: initialize project from launchpad"`
 - [ ] Push to main: `git push origin main`
-- [ ] Report to human: "Project initialized. First sprint has N issues ready."
+- [ ] Configure repository merge strategy — ask the human their preference:
+      ```
+      # Recommended: squash merge for clean linear history
+      gh api repos/{owner}/{repo} --method PATCH \
+        -f allow_squash_merge=true \
+        -f allow_merge_commit=false \
+        -f allow_rebase_merge=false \
+        -f squash_merge_commit_title="PR_TITLE" \
+        -f squash_merge_commit_message="PR_BODY"
+      ```
+      Options: squash (clean history, recommended), merge commit (preserves branch history),
+      rebase (linear but keeps individual commits). Ask which they prefer.
+- [ ] Protect the `main` branch (do this AFTER the first push — protection blocks direct pushes):
+      ```
+      gh api --method POST repos/{owner}/{repo}/rulesets \
+        --input - <<'EOF'
+      {
+        "name": "Protect main",
+        "target": "branch",
+        "enforcement": "active",
+        "conditions": { "ref_name": { "include": ["refs/heads/main"], "exclude": [] } },
+        "rules": [
+          { "type": "pull_request", "parameters": { "required_approving_review_count": 0 } },
+          { "type": "non_fast_forward" }
+        ]
+      }
+      EOF
+      ```
+      This requires PRs to merge into main (no direct push) and blocks force pushes.
+      `required_approving_review_count: 0` means PRs are required but no approval needed
+      (useful for solo devs — the human can adjust this later in Settings → Rules).
+- [ ] Report to human: "Project initialized. First sprint has N issues ready. Branch protection is now active — all future changes go through PRs."
 
 ---
 
