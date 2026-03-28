@@ -1,0 +1,98 @@
+# ──────────────────────────────────────────────
+# LLM / AI Tool Artifacts
+# ──────────────────────────────────────────────
+.claude/
+.aider*
+.cursor/
+.codeium/
+.continue/
+.copilot/
+.tabnine/
+.supermaven/
+.windsurf/
+.cody/
+.sourcegraph/
+.bolt/
+.v0/
+
+# ──────────────────────────────────────────────
+# Secrets & Environment
+# ──────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
+service-account*.json
+
+# ──────────────────────────────────────────────
+# OS
+# ──────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ──────────────────────────────────────────────
+# Editors & IDEs
+# ──────────────────────────────────────────────
+*.swp
+*.swo
+*~
+.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# ──────────────────────────────────────────────
+# Node.js
+# ──────────────────────────────────────────────
+node_modules/
+dist/
+build/
+.next/
+.nuxt/
+.output/
+*.tsbuildinfo
+.npm/
+.yarn/
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# ──────────────────────────────────────────────
+# Python
+# ──────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.tox/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# ──────────────────────────────────────────────
+# Ruby
+# ──────────────────────────────────────────────
+vendor/bundle/
+.bundle/
+*.gem
+coverage/
+
+# ──────────────────────────────────────────────
+# Go
+# ──────────────────────────────────────────────
+/bin/
+*.exe
+
+# ──────────────────────────────────────────────
+# Logs & Temp
+# ──────────────────────────────────────────────
+*.log
+tmp/
+.cache/
