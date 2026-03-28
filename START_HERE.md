@@ -1,0 +1,291 @@
+# START_HERE.md — Project initialization
+
+> **For the agent**: Read `AGENTS.md` before this file. When starting fresh in this repo,
+> work through these steps in order. Check each box as you complete it.
+> Do not skip steps. Do not start feature work until all phases are complete.
+>
+> **Phases 0–2 do NOT require the devcontainer** — they are conversational exploration
+> and file editing. Phase 2 ends by configuring the devcontainer based on decisions made.
+> **Phases 3–5 run INSIDE the devcontainer** after a rebuild.
+
+---
+
+## Phase 0 — Discovery
+
+> Pure conversation. No tools needed. Understand what we're building before touching anything.
+
+- [ ] Read `CLAUDE.md`, `docs/WORKFLOW.md`, and `AGENTS.md` for context
+- [ ] Ask the human: "What is this project? Name, purpose, one sentence."
+- [ ] Ask the human: "Who is it for? What problem does it solve?"
+- [ ] Fill in the `## Project identity` section in `CLAUDE.md` (name, purpose, stage).
+      Leave `Stack` blank — that gets decided in Architecture (Phase 1).
+- [ ] Report to human: "Identity captured. Starting project foundation."
+
+---
+
+## Phase 1 — Project Foundation
+
+> The agent guides the human through each document conversationally.
+> Ask questions, propose content, and wait for approval before writing.
+> Do NOT fill all docs at once — go one by one, IN THIS ORDER.
+> The order matters — each document builds on the ones before it.
+
+- [ ] **Vision** (`docs/VISION.md`):
+      This is the project's compass — take your time.
+      Explore through conversation: the problem (specific, lived, not abstract),
+      the insight (what others are missing), the philosophy (opinionated principles),
+      who it's for (concentric circles, plus who it's NOT for),
+      what success looks like (honest, not vanity metrics),
+      what this is NOT (anti-scope), architecture principles,
+      the litmus test (3-5 yes/no questions for every future feature),
+      execution strategy (high-level phases), and future ideas backlog.
+      Show the full vision and wait for approval.
+
+- [ ] **Build Identity** (`docs/IDENTITY.md`):
+      Ask: "What kind of technical leader does this project need?
+      What industry experience should they have? What's their decision style?"
+      Craft the persona: name, backstory, stack expertise, philosophy,
+      decision style, communication voice, quality bar, anti-patterns.
+      This becomes the agent's default voice for the project.
+      Show the full identity and wait for approval.
+
+- [ ] **Expert Panel** (`docs/EXPERTS.md`):
+      Based on the Vision and Identity, propose a panel composition.
+      Ask: "Here are the perspectives I think you need — what would you change?"
+      Build Core experts (5-7, always active) and Situational experts (2-4, phase-specific).
+      Each expert needs: name, backstory, project-specific skills, triggers, voice.
+      Build the Quick Reference table and Decision Routing table.
+      Show the full panel and wait for approval.
+      **This must be done BEFORE Architecture — the experts will be consulted there.**
+
+- [ ] **Architecture** (`docs/ARCHITECTURE.md`):
+      Expert-guided exploration — the system blueprint built with the panel.
+      Read VISION.md principles first. For each major decision:
+      present options, consult relevant experts (Architect, Security, Infra),
+      show tradeoffs from each perspective, let the human decide.
+      Cover: ecosystem, system overview, tech stack (every choice needs a WHY
+      and a rejected alternative), architecture style (DDD? Clean? MVC? Flat?
+      — the Architect expert recommends, human decides, DELETE unused sections),
+      domain model if applicable (contexts, aggregates, events, ports),
+      directory structure, key design decisions, security review.
+      Show the full architecture doc and wait for approval.
+      **After approval**: update `CLAUDE.md` → `Stack` field with the chosen tech stack.
+
+- [ ] **Roadmap** (`docs/ROADMAP.md`):
+      This is the living map — it evolves as the project grows.
+      Explore: intent (strategic focus), milestones (defined by outcomes, not dates),
+      phases (each with a goal and "does not start until" condition),
+      initial "What's Next" features (prioritized, sized S/M/L),
+      "Not Doing" (features explicitly rejected, with reasoning and revisit conditions),
+      and prioritization principles (3-5 tiebreaker rules).
+      History tables (sprints, specs, ADRs) start empty — they fill as work happens.
+      Show the initial roadmap and wait for approval.
+
+- [ ] **Branding & Visual Identity** (`docs/BRANDING.md`):
+      Creative exploration — this is the project's look, sound, and feel.
+      Explore: name (why it works, domain, tagline, alternatives considered),
+      brand personality (archetype, traits, voice do's/don'ts, anti-patterns),
+      visual identity (palette with design tokens, typography, spacing, style),
+      logo concept (2-3 options with reasoning, variants, usage rules),
+      microcopy (how the product sounds at key moments),
+      and image generation prompts for visual exploration (Stitch, Midjourney, etc.).
+      Show the full brand guide and wait for approval.
+
+- [ ] Report to human: "Project foundation complete. Moving to environment setup."
+
+---
+
+## Phase 2 — Environment Configuration
+
+> Still outside the devcontainer. Configure the dev environment based on Architecture decisions,
+> then hand off to the human to rebuild.
+
+- [ ] Configure `.devcontainer/Dockerfile` based on the chosen stack:
+      - Generic / unknown stack → keep `ubuntu-24.04-minimal` (already set)
+      - Ruby project → uncomment the Ruby block
+      - Python project → uncomment the Python block
+      - Node project → base image already has Node, add packages as needed
+      - Multiple languages → uncomment all relevant blocks
+- [ ] Update `.devcontainer/docker-compose.yml` — uncomment services the project needs (db, redis)
+- [ ] Update `.env.example` with real variable names (no values, just keys + comments).
+      Base it on the Architecture decisions:
+      - If Postgres enabled → add `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`
+      - If Redis enabled → add `REDIS_URL`
+      - Add any app-specific vars the Architecture defined (API keys, ports, etc.)
+      - Add any API keys the project needs (e.g. `LLM_API_KEY`, `DATABASE_URL`)
+- [ ] Tell the human:
+      ```
+      Environment configured. Next steps:
+      1. Open this project in VS Code
+      2. Cmd+Shift+P → "Dev Containers: Rebuild and Reopen in Container"
+      3. Wait for the build to complete
+      4. Once inside the devcontainer, resume this guide from Phase 3
+      ```
+      **STOP HERE until the human confirms they are inside the devcontainer.**
+
+      > **Note**: The rebuild may start a new agent session. If the agent loses context,
+      > it should read `START_HERE.md` and check which phases are already complete
+      > by reading the filled docs (VISION.md, IDENTITY.md, etc.). If they have content
+      > beyond the template placeholders, those phases are done — resume from Phase 3.
+
+---
+
+## Phase 3 — Setup (inside devcontainer)
+
+> From this point on, all work happens INSIDE the devcontainer.
+> The agent has access to `gh`, `git`, and the project's full toolchain.
+
+- [ ] Verify the environment:
+      ```
+      gh auth status
+      git --version
+      claude --version
+      ```
+      If any tool is missing or not authenticated, help the human fix it before continuing.
+- [ ] **Workflow** (`docs/WORKFLOW.md`):
+      The core process (GitHub Issues, Milestones, build cycle) is already defined.
+      Customize for this project based on the Architecture:
+      fill in the test strategy (layers, what to mock, commands),
+      update the definition of done (testing, linting, type checking commands),
+      update the documentation map with actual file locations,
+      and add any project-specific playbooks.
+      Show the customized sections and wait for approval.
+- [ ] Scaffold the directory structure defined in `docs/ARCHITECTURE.md`:
+      create `src/` subdirectories, `tests/`, `docs/adr/`, `docs/specs/`,
+      and any other directories the architecture calls for.
+      Add `.gitkeep` to empty directories so git tracks them.
+- [ ] Create a GitHub Project for task management:
+      Ask the human: "Do you want a project board? What name?"
+      ```
+      gh project create --owner {org} --title "{Project Name}" --format board
+      ```
+      Link the project to the repo. This is where sprints, issues, and tasks are visualized.
+      After creating: update the `project-url` in `.github/workflows/add-to-project.yml`
+      with the actual project URL (e.g. `https://github.com/orgs/{org}/projects/1`).
+- [ ] Create labels that `docs/WORKFLOW.md` references (use `--force` to update if they already exist):
+      ```
+      gh label create "feature" --color "0E8A16" --description "New functionality" --force
+      gh label create "bug" --color "D73A4A" --description "Something broken" --force
+      gh label create "research" --color "0075CA" --description "Explore before building" --force
+      gh label create "chore" --color "CFD3D7" --description "Maintenance, deps, config" --force
+      gh label create "blocked" --color "B60205" --description "Waiting on something external" --force
+      gh label create "agent:active" --color "5319E7" --description "Agent is working this" --force
+      gh label create "agent:review" --color "FBCA04" --description "Agent opened PR, waiting review" --force
+      ```
+- [ ] Create the first milestone — ask human for sprint name and due date:
+      `gh api repos/{owner}/{repo}/milestones -f title="Sprint 1 — Foundation" -f due_on="YYYY-MM-DDT00:00:00Z"`
+- [ ] Create 3-5 initial issues derived from `docs/ROADMAP.md` "What's Next" section.
+      Use `.github/ISSUE_TEMPLATE/feature.md` as the format.
+      Ask the human to confirm which items from the roadmap go into Sprint 1.
+      Assign all issues to the milestone and add the `feature` label.
+- [ ] Remind the human to add required secrets (do NOT paste keys — just remind):
+      ```
+      Human: add this secret in Settings → Secrets → Actions → New secret:
+      - ADD_TO_PROJECT_PAT    — for auto-adding issues to the project board
+                                (classic PAT with `project` scope, or fine-grained with
+                                 org Projects read/write + repo Issues read)
+      ```
+- [ ] Protect the `main` branch (settings are NOT copied from templates):
+      ```
+      gh api --method POST repos/{owner}/{repo}/rulesets \
+        --input - <<'EOF'
+      {
+        "name": "Protect main",
+        "target": "branch",
+        "enforcement": "active",
+        "conditions": { "ref_name": { "include": ["refs/heads/main"], "exclude": [] } },
+        "rules": [
+          { "type": "pull_request", "parameters": { "required_approving_review_count": 0 } },
+          { "type": "non_fast_forward" }
+        ]
+      }
+      EOF
+      ```
+      This requires PRs to merge into main (no direct push) and blocks force pushes.
+      `required_approving_review_count: 0` means PRs are required but no approval needed
+      (useful for solo devs — the human can adjust this later in Settings → Rules).
+- [ ] Ask the human: "Do you want GitHub Pages enabled?"
+      If yes, remind them to enable it manually (settings are NOT copied from templates):
+      ```
+      Human: enable GitHub Pages in the repo settings:
+      1. Go to Settings → Pages
+      2. Source: select "GitHub Actions"
+      3. The workflow at .github/workflows/pages.yml will handle deploys
+      ```
+      The default workflow deploys `docs/public/` as a static site.
+      If the project uses a framework (Next.js, Vite, etc.), customize the workflow
+      to add build steps.
+      If no, remove `.github/workflows/pages.yml` and `docs/public/`.
+- [ ] Verify workflows are present:
+      check `.github/workflows/add-to-project.yml` and `.github/workflows/pages.yml` (if enabled) exist
+- [ ] Report to human: "GitHub setup complete. Moving to finalization."
+
+---
+
+## Phase 4 — Finalize & First Commit
+
+- [ ] Generate `.notdefined.yml` — follow the spec at:
+      https://raw.githubusercontent.com/rodacato/rodacato/master/docs/guides/notdefined-yml-spec.md
+      Pull values from docs already filled:
+      - `tagline` and `description` → from `docs/BRANDING.md` (name section)
+      - `color` → from `docs/BRANDING.md` (accent primary color)
+      - Stack, status, version → from `CLAUDE.md` and `docs/ARCHITECTURE.md`
+      Use `status: active` and `version: "0.1.0"` as starting values.
+      Show the human and ask for approval.
+- [ ] **LICENSE** — Ask the human: "What license? MIT, Apache 2.0, GPL, or proprietary?"
+      Generate the license file. If unsure, recommend MIT for open source or skip for private.
+- [ ] **CONTRIBUTING.md** — Generate based on the project's setup:
+      - How to set up the dev environment (from `.devcontainer/`)
+      - Branch naming and commit conventions (from `docs/WORKFLOW.md`)
+      - How to open a PR (from `docs/WORKFLOW.md`)
+      - Code style and testing expectations (from `docs/WORKFLOW.md` definition of done)
+      Show the human and ask for approval.
+- [ ] **SECURITY.md** — Generate a vulnerability reporting policy:
+      - How to report (email or GitHub private advisory)
+      - What's in scope
+      - Expected response timeline
+      Ask the human for the security contact email.
+      Show and approve.
+- [ ] **CODE_OF_CONDUCT.md** — Ask the human: "Do you want a Code of Conduct?"
+      If yes, generate Contributor Covenant (standard).
+      If no, skip.
+- [ ] Update `README.md`:
+      - Replace all placeholder sections with real content from the docs
+      - Update the project structure tree to match the actual directory layout
+      - Pull the tagline, stack, and description from the filled docs
+      - Add license badge if applicable
+- [ ] Review all changed files: `git status`
+- [ ] Make sure `.env` is in `.gitignore` and NOT staged
+- [ ] Commit the initialization:
+      `git add -A && git commit -m "chore: initialize project from launchpad"`
+- [ ] Push to main: `git push origin main`
+- [ ] Report to human: "Project initialized. First sprint has N issues ready."
+
+---
+
+## Phase 5 — Cleanup
+
+> Final sweep: remove all scaffolding so the repo looks like a real project, not a template.
+
+- [ ] **Verification sweep** — check EVERY doc before cleaning:
+      - Scan all `docs/*.md` for unfilled `<!-- placeholder -->` or `<!-- e.g.` comments.
+        If any remain, the doc is incomplete — go back and fill it.
+      - Verify `CLAUDE.md` has no placeholder fields (name, purpose, stack, stage all filled).
+      - Verify `.notdefined.yml` has no `<!-- fill during` comments.
+      - Verify `README.md` has no `<!-- placeholder -->` or `<!-- org/repo -->` left.
+      - Report any issues to the human before proceeding.
+- [ ] Remove `<!-- AGENT INSTRUCTIONS ... -->` blocks from every `docs/*.md` file.
+      These are scaffolding for the init process — the filled content speaks for itself.
+- [ ] Remove `START_HERE.md` from the `CLAUDE.md` repo structure tree.
+- [ ] Remove the `IF START_HERE.md exists` block from `AGENTS.md` startup behavior.
+      Keep only the `ELSE` branch (established project flow) as the default.
+- [ ] Delete this `START_HERE.md`:
+      `git rm START_HERE.md`
+- [ ] Commit the cleanup:
+      `git add -A && git commit -m "chore: remove initialization scaffolding"`
+- [ ] Push: `git push origin main`
+- [ ] Tell the human: "Setup complete. Run 'gh issue list' to start the first sprint."
+
+---
+
+> After this phase, this file no longer exists. Future work is tracked in GitHub Issues.
