@@ -8,11 +8,22 @@
 > and file editing. Phase 2 ends by configuring the devcontainer based on decisions made.
 > **Phases 3–5 run INSIDE the devcontainer** after a rebuild.
 
+> **Checkpoint rule**: After completing each step, IMMEDIATELY mark its checkbox.
+> This is your recovery mechanism — if context is lost mid-session, checkboxes
+> tell you (or the next agent session) exactly where to resume.
+
+> **Recovery protocol** — if you lose context or start a new session mid-setup:
+> 1. Read this file — check which boxes are marked `[x]`
+> 2. Read `CLAUDE.md` — if `Stack` is filled, Phase 1 Architecture is done
+> 3. Read the last doc in Phase 1 order that has content beyond placeholders
+> 4. Resume from the next unchecked item
+> 5. Do NOT re-do completed steps — trust the checkboxes and filled docs
+
 ---
 
-## Phase 0 — Discovery
+## Phase 0 — Discovery and Identity Capture
 
-> Pure conversation. No tools needed. Understand what we're building before touching anything.
+> Understand what we're building. Minimal file edits — just capturing identity.
 
 - [ ] Read `CLAUDE.md`, `docs/WORKFLOW.md`, and `AGENTS.md` for context
 - [ ] Ask the human: "What is this project? Name, purpose, one sentence."
@@ -29,6 +40,9 @@
 > Ask questions, propose content, and wait for approval before writing.
 > Do NOT fill all docs at once — go one by one, IN THIS ORDER.
 > The order matters — each document builds on the ones before it.
+
+> **Checkpoint**: After completing each document, mark its checkbox immediately.
+> If this phase spans multiple sessions, the checkboxes indicate where to resume.
 
 - [ ] **Vision** (`docs/VISION.md`):
       This is the project's compass — take your time.
@@ -100,19 +114,23 @@
 > Still outside the devcontainer. Configure the dev environment based on Architecture decisions,
 > then hand off to the human to rebuild.
 
-- [ ] Configure `.devcontainer/Dockerfile` based on the chosen stack:
-      - Generic / unknown stack → keep `ubuntu-24.04-minimal` (already set)
-      - Ruby project → uncomment the Ruby block
-      - Python project → uncomment the Python block
-      - Node project → base image already has Node, add packages as needed
-      - Multiple languages → uncomment all relevant blocks
+- [ ] Configure `.devcontainer/devcontainer.json` based on the chosen stack:
+      Add the appropriate language features to the `features` section.
+      Reference examples are listed as comments in the features block.
+      Common features:
+      - Ruby → `"ghcr.io/devcontainers/features/ruby:1": { "version": "3.3" }`
+      - Python → `"ghcr.io/devcontainers/features/python:1": { "version": "3.12" }`
+      - Node → `"ghcr.io/devcontainers/features/node:1": { "version": "22" }`
+      - Go → `"ghcr.io/devcontainers/features/go:1": { "version": "1.22" }`
+      See https://containers.dev/features for the full catalog.
+      The Dockerfile should remain minimal — only add system-level dependencies
+      that don't have a devcontainer feature equivalent.
 - [ ] Update `.devcontainer/docker-compose.yml` — uncomment services the project needs (db, redis)
-- [ ] Update `.env.example` with real variable names (no values, just keys + comments).
-      Base it on the Architecture decisions:
-      - If Postgres enabled → add `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`
-      - If Redis enabled → add `REDIS_URL`
+- [ ] Update `.env.example` — customize the template based on Architecture decisions:
+      - If Postgres enabled → uncomment the database variables
+      - If Redis enabled → uncomment the Redis variables
       - Add any app-specific vars the Architecture defined (API keys, ports, etc.)
-      - Add any API keys the project needs (e.g. `LLM_API_KEY`, `DATABASE_URL`)
+      - Ensure variable names match what the code will expect
 - [ ] Tell the human:
       ```
       Environment configured. Next steps:
@@ -123,14 +141,12 @@
       ```
       **STOP HERE until the human confirms they are inside the devcontainer.**
 
-      > **Note**: The rebuild may start a new agent session. If the agent loses context,
-      > it should read `START_HERE.md` and check which phases are already complete
-      > by reading the filled docs (VISION.md, IDENTITY.md, etc.). If they have content
-      > beyond the template placeholders, those phases are done — resume from Phase 3.
+      > **Note**: The rebuild starts a new agent session. Follow the Recovery Protocol
+      > at the top of this file to determine where to resume.
 
 ---
 
-## Phase 3 — Setup (inside devcontainer)
+## Phase 3a — Code Scaffold (inside devcontainer)
 
 > From this point on, all work happens INSIDE the devcontainer.
 > The agent has access to `gh`, `git`, and the project's full toolchain.
@@ -141,7 +157,17 @@
       git --version
       claude --version
       ```
-      If any tool is missing or not authenticated, help the human fix it before continuing.
+      Then verify the project's stack tools are available
+      (commands depend on Architecture choices — examples):
+      ```
+      ruby --version      # Ruby projects
+      node --version      # Node projects
+      python3 --version   # Python projects
+      go version          # Go projects
+      pg_isready -h db    # If Postgres is enabled
+      redis-cli -h redis ping  # If Redis is enabled
+      ```
+      If any required tool is missing or not the expected version, fix it before continuing.
 - [ ] **Workflow** (`docs/WORKFLOW.md`):
       The core process (GitHub Issues, Milestones, build cycle) is already defined.
       Customize for this project based on the Architecture:
@@ -154,6 +180,15 @@
       create `src/` subdirectories, `tests/`, `docs/adr/`, `docs/specs/`,
       and any other directories the architecture calls for.
       Add `.gitkeep` to empty directories so git tracks them.
+
+---
+
+## Phase 3b — GitHub Configuration
+
+> Configure GitHub repository settings, labels, milestones, and initial issues.
+> If any GitHub API call fails due to permissions, note it and continue with the rest.
+> The human can fix permissions later without blocking other work.
+
 - [ ] Create a GitHub Project for task management:
       Ask the human: "Do you want a project board? What name?"
       ```
