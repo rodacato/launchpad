@@ -196,7 +196,18 @@
       ```
       gh project create --owner {org} --title "{Project Name}" --format board
       ```
-      Link the project to the repo. This is where sprints, issues, and tasks are visualized.
+      Then link the project to the repo (Settings → Projects, or via UI: repo Projects tab → "Link a project"):
+      ```
+      gh api graphql -f query='
+        mutation($projectId:ID!, $repoId:ID!) {
+          linkProjectV2ToRepository(input:{projectId:$projectId, repositoryId:$repoId}) {
+            repository { id }
+          }
+        }' -f projectId="{PROJECT_NODE_ID}" -f repoId="{REPO_NODE_ID}"
+      ```
+      To get the IDs: `gh project list --owner {org} --format json` and `gh repo view --json id`.
+      Alternatively, the human can link it manually from the repo's Projects tab.
+      This is where sprints, issues, and tasks are visualized.
 - [ ] Create labels that `docs/WORKFLOW.md` references (use `--force` to update if they already exist):
       ```
       gh label create "feature" --color "0E8A16" --description "New functionality" --force
