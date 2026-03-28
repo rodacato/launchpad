@@ -1,4 +1,6 @@
-version: "3.9"
+# Port convention: when running multiple launchpad projects simultaneously,
+# choose a unique port range per project (e.g., 47000-47009) to avoid collisions.
+# Update the host ports below accordingly.
 
 services:
   app:
