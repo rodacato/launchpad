@@ -9,7 +9,7 @@ in your project. Run one, get a result. Iterate from there.
 
 ```bash
 claude plugin marketplace add git@github.com:rodacato/launchpad.git
-claude plugin install launchpad@rodacato-marketplace
+claude plugin install launchpad@launchpad-marketplace
 ```
 
 ## Usage
