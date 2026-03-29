@@ -36,6 +36,11 @@ ELSE (established project):
   6. Create branch and start working
 ```
 
+**Additional triggers**:
+- "Revisá los comments del PR" / "Address PR feedback" → run step 10 from Agent Workflow.
+  Read all review comments, fix what makes sense, reply to disagreements with reasoning,
+  resolve addressed threads, and push. Do NOT resolve threads you didn't address.
+
 **Do not**:
 - Create issues (human's job)
 - Merge PRs (human's job)

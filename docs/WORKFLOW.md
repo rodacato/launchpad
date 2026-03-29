@@ -202,6 +202,24 @@ gh pr ready
 gh issue edit {N} --remove-label "agent:active" --add-label "agent:review"
 # Move to "Done" on the project board
 gh project item-edit --project-id {PROJECT_NUMBER} --id {ITEM_ID} --field-id {STATUS_FIELD_ID} --single-select-option-id {DONE_ID}
+
+# 10. Address PR review feedback (triggered by human)
+#     Read all review comments and threads on the PR
+gh api repos/{owner}/{repo}/pulls/{PR_NUMBER}/comments
+gh pr view {PR_NUMBER} --json reviews,comments
+
+#     For each comment:
+#       - If actionable: fix the code, commit, push
+#       - If you disagree: reply with technical reasoning, do NOT resolve
+#       - If it's a question: answer in the thread
+#     After pushing fixes, resolve addressed threads:
+gh api graphql -f query='
+  mutation($threadId:ID!) {
+    resolveReviewThread(input:{threadId:$threadId}) {
+      thread { isResolved }
+    }
+  }' -f threadId="{THREAD_NODE_ID}"
+#     Get thread IDs from: gh api repos/{owner}/{repo}/pulls/{PR_NUMBER}/reviews
 ```
 
 ---
