@@ -150,6 +150,10 @@ Sprints are GitHub Milestones. Each milestone has:
 - A due date (optional but recommended)
 - A set of issues
 
+**Issues vs PRs**: Only issues go on the project board and milestones.
+PRs are NOT added to the board — they connect to issues via `closes #N` in the PR body.
+Adding a PR to the board creates a duplicate item. The PR lives in the Pull Requests tab only.
+
 ```bash
 # Create a sprint
 gh api repos/{owner}/{repo}/milestones -f title="Sprint 1 — Foundation" -f due_on="2026-04-15T00:00:00Z"
@@ -194,7 +198,7 @@ git checkout -b issue-{N}-{short-description}
 # 7. Commit following convention
 git commit -m "feat(scope): what was done — closes #N"
 
-# 8. Push and open PR
+# 8. Push and open PR (do NOT add the PR to the project board — only issues go there)
 gh pr create --title "feat: description (#N)" --body "closes #{N}" --draft
 
 # 9. When ready for review
