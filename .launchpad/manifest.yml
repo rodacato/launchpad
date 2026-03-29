@@ -1,7 +1,17 @@
-# Launchpad Template Manifest
-# Only tracks version. Sync is handled by a remote script.
-# To leave launchpad: delete this entire .launchpad/ directory.
+# Launchpad Manifest
+# Tracks which modules are installed and their versions.
+# To remove launchpad: delete this entire .launchpad/ directory.
+# To check for updates: bash <(curl -sL https://raw.githubusercontent.com/rodacato/launchpad/master/scripts/check.sh)
 
-version: "0.4.0"
 source: rodacato/launchpad
 branch: master
+modules:
+  # vision: "1.0"
+  identity: "1.0"
+  experts: "1.0"
+  # architecture: "1.0"
+  # branding: "1.0"
+  # roadmap: "1.0"
+  # workflow: "1.0"
+  # agents: "1.0"
+  # github: "1.0"
