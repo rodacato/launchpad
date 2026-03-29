@@ -4,7 +4,7 @@ set -euo pipefail
 # Launchpad — single entry point
 #
 # Usage:
-#   curl -sL https://raw.githubusercontent.com/rodacato/launchpad/master/install.sh | bash
+#   curl -sL https://raw.githubusercontent.com/rodacato/launchpad/master/scripts/install.sh | bash
 #
 # If .launchpad/ exists → sync
 # If .launchpad/ doesn't exist → adopt

@@ -99,7 +99,7 @@ Defined during project setup. See `docs/ARCHITECTURE.md` for the full tech stack
 git clone https://github.com/{org}/{repo}.git
 cd {repo}
 
-# 2. Copy environment variables
+# 2. Copy environment variables (created during project setup)
 cp .env.example .env
 # Edit .env with your values
 

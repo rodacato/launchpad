@@ -22,6 +22,17 @@ if [[ ! -f "$MANIFEST" ]]; then
   exit 1
 fi
 
+# Verify gh CLI is available and authenticated
+if ! command -v gh &>/dev/null; then
+  echo "Error: gh CLI not found. Install it: https://cli.github.com"
+  exit 1
+fi
+
+if ! gh auth status &>/dev/null; then
+  echo "Error: gh CLI not authenticated. Run: gh auth login"
+  exit 1
+fi
+
 SOURCE=$(grep '^source:' "$MANIFEST" | awk '{print $2}')
 BRANCH=$(grep '^branch:' "$MANIFEST" | awk '{print $2}')
 LOCAL_VERSION=$(grep '^version:' "$MANIFEST" | awk '{print $2}' | tr -d '"')
@@ -43,22 +54,23 @@ if [[ "$LOCAL_VERSION" == "$REMOTE_VERSION" ]]; then
   exit 0
 fi
 
-echo "Update available: v$LOCAL_VERSION → v$REMOTE_VERSION"
+echo "Version mismatch: v$LOCAL_VERSION (local) → v$REMOTE_VERSION (remote)"
 echo ""
 
 # Files that live in .launchpad/ — the ONLY things we sync
 FILES=(
   ".launchpad/AGENTS.md"
   ".launchpad/WORKFLOW.md"
-  ".launchpad/ADOPT.md"
   ".launchpad/manifest.yml"
 )
 
 UPDATES=0
+ERRORS=0
 
 for file in "${FILES[@]}"; do
   REMOTE_CONTENT=$(gh api "repos/$SOURCE/contents/$file?ref=$BRANCH" --jq '.content' 2>/dev/null | base64 -d 2>/dev/null) || {
-    echo "  SKIP  $file (not found in template)"
+    echo "  FAIL  $file (could not fetch — check repo access and auth)"
+    ERRORS=$((ERRORS + 1))
     continue
   }
 
@@ -85,5 +97,9 @@ else
   echo "$UPDATES file(s) updated."
 fi
 echo ""
+if [[ $ERRORS -gt 0 ]]; then
+  echo "WARNING: $ERRORS file(s) failed to download. Check gh auth and repo access."
+  echo ""
+fi
 echo "Review changes: git diff .launchpad/"
 echo "Commit: git add .launchpad/ && git commit -m 'chore: sync launchpad to v$REMOTE_VERSION'"

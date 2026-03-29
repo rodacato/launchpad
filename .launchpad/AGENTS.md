@@ -38,7 +38,7 @@ ELSE (established project):
      Read .launchpad/manifest.yml for local version.
      Fetch remote version: gh api repos/{source}/contents/.launchpad/manifest.yml?ref={branch}
      IF remote version is newer -> tell the human: "Launchpad update available (vX → vY).
-       Run: curl -sL https://raw.githubusercontent.com/{source}/master/scripts/sync.sh | bash"
+       Run: curl -sL https://raw.githubusercontent.com/{source}/{branch}/scripts/install.sh | bash"
      Continue regardless — this is informational, not blocking.
   5. Check current sprint health:
      Run: gh api repos/{owner}/{repo}/milestones --jq '.[] | select(.state=="open")'

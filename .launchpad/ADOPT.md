@@ -110,16 +110,18 @@ Show all proposed content to the human and wait for approval before writing.
 > Some of these may already be configured. Check first, skip what exists.
 
 - [ ] Check existing labels: `gh label list`
-      Create any missing labels from the standard set:
+      Create only the labels that don't already exist (do NOT use --force — it overwrites custom colors):
       ```
-      gh label create "feature" --color "0E8A16" --description "New functionality" --force
-      gh label create "bug" --color "D73A4A" --description "Something broken" --force
-      gh label create "research" --color "0075CA" --description "Explore before building" --force
-      gh label create "chore" --color "CFD3D7" --description "Maintenance, deps, config" --force
-      gh label create "blocked" --color "B60205" --description "Waiting on something external" --force
-      gh label create "agent:active" --color "5319E7" --description "Agent is working this" --force
-      gh label create "agent:review" --color "FBCA04" --description "Agent opened PR, waiting review" --force
+      # Only create if missing — check gh label list output first
+      gh label create "feature" --color "0E8A16" --description "New functionality" 2>/dev/null || true
+      gh label create "bug" --color "D73A4A" --description "Something broken" 2>/dev/null || true
+      gh label create "research" --color "0075CA" --description "Explore before building" 2>/dev/null || true
+      gh label create "chore" --color "CFD3D7" --description "Maintenance, deps, config" 2>/dev/null || true
+      gh label create "blocked" --color "B60205" --description "Waiting on something external" 2>/dev/null || true
+      gh label create "agent:active" --color "5319E7" --description "Agent is working this" 2>/dev/null || true
+      gh label create "agent:review" --color "FBCA04" --description "Agent opened PR, waiting review" 2>/dev/null || true
       ```
+      If a label already exists, the command is silently skipped.
 
 - [ ] Check merge strategy: `gh api repos/{owner}/{repo} --jq '.allow_squash_merge'`
       If not configured, ask the human their preference and apply:
@@ -151,6 +153,14 @@ Show all proposed content to the human and wait for approval before writing.
       EOF
       ```
 
+- [ ] Check for project board: `gh project list --owner {org}`
+      Ask the human: "Do you have a project board for this project?"
+      If no, ask: "Do you want one?" and create it:
+      ```
+      gh project create --owner {org} --title "{Project Name} Board" --format board
+      ```
+      Update `CLAUDE.md` → `GitHub Project Number` with the project number.
+
 - [ ] Project board automations — tell the human:
       ```
       If you have a project board, enable these automations:
@@ -164,7 +174,11 @@ Show all proposed content to the human and wait for approval before writing.
 
 ## Phase 5 — Verify and commit
 
-- [ ] Run `.launchpad/sync.sh` — should say "Everything up to date"
+- [ ] Verify sync works:
+      ```
+      curl -sL https://raw.githubusercontent.com/rodacato/launchpad/master/scripts/install.sh | bash
+      ```
+      Should say "Everything up to date"
 - [ ] Verify workflows exist:
       - `.github/workflows/enforce-issue-link.yml`
       - `.github/workflows/pr-labels.yml`
@@ -172,9 +186,9 @@ Show all proposed content to the human and wait for approval before writing.
 - [ ] Commit: `git add -A && git commit -m "chore: adopt launchpad template"`
 - [ ] Delete this file: `git rm ADOPT.md && git commit -m "chore: remove adoption checklist"`
 - [ ] Tell the human: "Launchpad adopted. The agent workflow is now active.
-      Future template updates: run `.launchpad/sync.sh`"
+      Future template updates: curl -sL https://raw.githubusercontent.com/rodacato/launchpad/master/scripts/install.sh | bash"
 
 ---
 
 > After this, the project is part of the launchpad ecosystem.
-> Future updates: `.launchpad/sync.sh` to check, `.launchpad/sync.sh --apply` to update.
+> Future updates: `curl -sL https://raw.githubusercontent.com/rodacato/launchpad/master/scripts/install.sh | bash`

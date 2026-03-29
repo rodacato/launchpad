@@ -28,6 +28,11 @@ if ! git rev-parse --is-inside-work-tree &>/dev/null; then
   exit 1
 fi
 
+if ! command -v curl &>/dev/null; then
+  echo "Error: curl not found."
+  exit 1
+fi
+
 if [[ -f ".launchpad/manifest.yml" ]]; then
   echo "This project already has launchpad. To update, run:"
   echo "  curl -sL $RAW_BASE/scripts/sync.sh | bash"
