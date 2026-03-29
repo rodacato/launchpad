@@ -1,3 +1,72 @@
+# Launchpad
+
+> Standardized project bootstrapping with AI-assisted development workflows.
+
+<!-- TEMPLATE DOCS — remove this entire section during project setup (Phase 4) -->
+
+## How to use Launchpad
+
+### New project (start from scratch)
+
+1. Click **"Use this template"** → "Create a new repository" on GitHub
+2. Clone the new repo and open in VS Code
+3. The agent detects `START_HERE.md` and walks you through the full setup
+4. Result: docs, devcontainer, workflows, board, sprint — all configured
+
+### Existing project (add the process layer)
+
+```bash
+# Run from your project root
+curl -sL https://raw.githubusercontent.com/rodacato/launchpad/master/scripts/install.sh | bash
+```
+
+What it does:
+- Creates `.launchpad/` with base workflow and agent roles (3 markdown files)
+- Copies GitHub workflows and issue templates (only if missing — never overwrites)
+- Drops `ADOPT.md` — the agent reads it and sets everything up interactively
+
+What it does NOT do:
+- Modify any existing file
+- Delete anything
+- Push to remote
+- Run anything beyond copying files
+
+You review with `git diff` before committing.
+
+### Already using Launchpad (update)
+
+```bash
+# Same command — detects launchpad and syncs .launchpad/ files only
+curl -sL https://raw.githubusercontent.com/rodacato/launchpad/master/scripts/install.sh | bash
+```
+
+What it does:
+- Compares your `.launchpad/manifest.yml` version against the template
+- If outdated, downloads updated `.launchpad/*.md` files
+- Never touches anything outside `.launchpad/`
+
+### Leave Launchpad
+
+```bash
+rm -rf .launchpad/
+```
+
+That's it. Everything outside `.launchpad/` is yours — workflows, templates, docs. They keep working without launchpad.
+
+### What goes where
+
+| Location | Owner | Synced? | Purpose |
+|----------|-------|---------|---------|
+| `.launchpad/` | Launchpad template | Yes | Base process, agent roles, version |
+| `AGENTS.md` | Your project | Never | Project-specific agent overrides |
+| `docs/WORKFLOW.md` | Your project | Never | Definition of done, test strategy |
+| `.github/workflows/` | Your project | Never | Copied once, yours to customize |
+| Everything else | Your project | Never | Code, docs, config |
+
+---
+
+<!-- END TEMPLATE DOCS -->
+
 # Project Name
 
 > One-line description of the project.

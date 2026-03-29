@@ -308,6 +308,7 @@
       - Verify `CLAUDE.md` has no placeholder fields (name, purpose, stack, stage all filled).
       - Verify `README.md` has no `<!-- placeholder -->` or `<!-- org/repo -->` left.
       - Remove `<!-- AGENT INSTRUCTIONS ... -->` blocks from every `docs/*.md` file.
+      - Remove the `<!-- TEMPLATE DOCS ... -->` section from the top of `README.md`.
       - Remove `START_HERE.md` from the `CLAUDE.md` repo structure tree.
       - Remove the `IF START_HERE.md exists` block from `.launchpad/AGENTS.md` startup behavior.
         Keep only the `ELSE` branch as the default (remove the `ELSE (established project):` label too — just start with the numbered steps directly).
