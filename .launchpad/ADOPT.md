@@ -1,8 +1,13 @@
 # Launchpad Adoption Checklist
 
-> This file was created by `adopt.sh`. Work through it, then delete it.
-> Unlike START_HERE.md (for new projects), this assumes your project already
-> exists with code, docs, and history. We're adding the launchpad process layer.
+> **For the agent**: This file guides adoption of the launchpad process into an existing project.
+> The project already has code, docs, and history — you are adding the process layer.
+>
+> **Your approach**: Read the project's existing documentation FIRST to understand context.
+> Then fill in the launchpad files using what you learned. Ask the human when something
+> is unclear or missing — do NOT guess or leave placeholders.
+>
+> **Checkpoint rule**: After completing each step, IMMEDIATELY mark its checkbox.
 
 ---
 
@@ -17,42 +22,95 @@ The adopt script downloaded:
 
 ---
 
-## Manual setup
+## Phase 1 — Understand the project
 
-### 1. CLAUDE.md — add launchpad fields
+> Read everything before changing anything. Build your mental model.
 
-If your project has a `CLAUDE.md`, add these fields to `## Project identity`:
+- [ ] Read `CLAUDE.md` (if it exists) for project context
+- [ ] Read `README.md` for project overview, stack, and purpose
+- [ ] Scan the codebase: check `package.json`, `Gemfile`, `go.mod`, `pyproject.toml`,
+      or similar to identify the stack, test runner, linter, and type checker
+- [ ] Read existing docs: check `docs/` for any architecture, vision, or workflow docs
+- [ ] Check git history: `git log --oneline -20` to understand recent work patterns
+- [ ] Check GitHub state: `gh issue list --state open`, `gh milestone list`, `gh label list`
 
-```
-**GitHub Project Number**: <!-- from gh project list --owner {org} -->
-```
+Now ask the human to clarify anything you couldn't determine:
+- "I found [stack]. Is that the complete stack, or is there more?"
+- "I see you have [X issues open]. Are you using milestones/sprints?"
+- "Do you have a project board? If so, what's the project number?"
+- "Are there any project-specific rules I should know about?"
+  (e.g., "never modify the billing module", "always run migrations in a transaction")
 
-Add to `## How to start a session`:
+**STOP and wait for the human to answer before continuing.**
 
-```
-1. Read `.launchpad/WORKFLOW.md` (base process) then `docs/WORKFLOW.md` (project specifics)
-```
+---
 
-If your project doesn't have a `CLAUDE.md`, create one based on the template.
+## Phase 2 — Configure CLAUDE.md
 
-### 2. docs/WORKFLOW.md — customize for your project
+- [ ] If `CLAUDE.md` exists, add these fields to `## Project identity` (if missing):
+      ```
+      **GitHub Project Number**: <!-- ask human or run: gh project list --owner {org} -->
+      ```
+      Add or update `## How to start a session` to include:
+      ```
+      1. Read `.launchpad/WORKFLOW.md` (base process) then `docs/WORKFLOW.md` (project specifics)
+      ```
+      Add to `## Repository structure` the `.launchpad/` directory.
 
-Open `docs/WORKFLOW.md` and fill in:
-- [ ] Documentation map (update file locations to match your project)
-- [ ] Definition of done (testing, linting, type checking commands)
-- [ ] Test strategy (layers, what to mock, commands)
-- [ ] Project-specific playbooks (if any)
+- [ ] If `CLAUDE.md` does NOT exist, create one:
+      Fill in Project Identity from what you learned in Phase 1 (name, purpose, stack, stage).
+      Ask the human to confirm before writing.
 
-### 3. AGENTS.md — customize for your project
+---
 
-Open `AGENTS.md` and add:
-- [ ] Project-specific rules (things the agent should never do in THIS project)
-- [ ] Additional triggers (project-specific commands)
-- [ ] Extra roles (if you have agents beyond the base Team Lead + Research)
+## Phase 3 — Customize project workflow
 
-### 4. GitHub configuration
+> Use what you learned in Phase 1 to fill these in automatically.
+> Show the human your proposed content and wait for approval before writing.
 
-- [ ] Create labels (if they don't exist):
+- [ ] **docs/WORKFLOW.md** — Documentation map:
+      Read the actual project structure (`ls docs/`, check for README, CHANGELOG, etc.)
+      and fill in the documentation map table with real file locations.
+
+- [ ] **docs/WORKFLOW.md** — Definition of done:
+      Based on the stack you detected:
+      - Find the test command (e.g., from `package.json` scripts, `Makefile`, etc.)
+      - Find the lint command
+      - Find the type check command (if applicable)
+      Fill in the checkboxes with the real commands.
+
+- [ ] **docs/WORKFLOW.md** — Test strategy:
+      Based on the architecture:
+      - What layers exist? (API, domain, infrastructure, UI)
+      - What gets mocked? What uses real dependencies?
+      Fill in the table and commands section.
+
+- [ ] **docs/WORKFLOW.md** — Project-specific playbooks:
+      Ask the human: "Are there recurring operations specific to this project?"
+      (e.g., data migrations, deployments, seed data, environment setup)
+      Add them as playbooks if any.
+
+- [ ] **AGENTS.md** — Project-specific rules:
+      Based on what you learned, propose rules. Examples:
+      - Sensitive areas of the code that need human approval
+      - Specific testing requirements
+      - Deployment restrictions
+      Show the human and ask: "Are there other rules I should follow in this project?"
+
+- [ ] **AGENTS.md** — Additional triggers:
+      Ask the human: "Are there project-specific commands you want me to respond to?"
+      (e.g., "deploy to staging", "run the data migration", "generate API docs")
+
+Show all proposed content to the human and wait for approval before writing.
+
+---
+
+## Phase 4 — GitHub configuration
+
+> Some of these may already be configured. Check first, skip what exists.
+
+- [ ] Check existing labels: `gh label list`
+      Create any missing labels from the standard set:
       ```
       gh label create "feature" --color "0E8A16" --description "New functionality" --force
       gh label create "bug" --color "D73A4A" --description "Something broken" --force
@@ -63,7 +121,8 @@ Open `AGENTS.md` and add:
       gh label create "agent:review" --color "FBCA04" --description "Agent opened PR, waiting review" --force
       ```
 
-- [ ] Configure merge strategy (if not already set):
+- [ ] Check merge strategy: `gh api repos/{owner}/{repo} --jq '.allow_squash_merge'`
+      If not configured, ask the human their preference and apply:
       ```
       gh api repos/{owner}/{repo} --method PATCH \
         -f allow_squash_merge=true \
@@ -74,15 +133,8 @@ Open `AGENTS.md` and add:
         -f delete_branch_on_merge=true
       ```
 
-- [ ] Enable project board automations (if you have a project board):
-      ```
-      Open the project board → menu (⋯) → Workflows
-      1. "Auto-add to project" → select this repo → save
-      2. "Item closed" → set status to "Done" → save
-      3. "Pull request merged" → set status to "Done" → save
-      ```
-
-- [ ] Protect main branch (if not already protected):
+- [ ] Check branch protection: `gh api repos/{owner}/{repo}/rulesets`
+      If main is not protected, ask the human if they want protection and apply:
       ```
       gh api --method POST repos/{owner}/{repo}/rulesets \
         --input - <<'EOF'
@@ -99,21 +151,30 @@ Open `AGENTS.md` and add:
       EOF
       ```
 
-### 5. Verify
-
-- [ ] Run `.launchpad/sync.sh` — should say "Everything up to date"
-- [ ] Open a test PR — enforce-issue-link should check for `closes #N`
-- [ ] Start a new agent session — it should follow the startup behavior from `.launchpad/AGENTS.md`
-
-### 6. Commit and clean up
-
-```bash
-git add -A && git commit -m "chore: adopt launchpad template"
-rm ADOPT.md
-git add -A && git commit -m "chore: remove adoption checklist"
-```
+- [ ] Project board automations — tell the human:
+      ```
+      If you have a project board, enable these automations:
+      Open the project board → menu (⋯) → Workflows
+      1. "Auto-add to project" → select this repo → save
+      2. "Item closed" → set status to "Done" → save
+      3. "Pull request merged" → set status to "Done" → save
+      ```
 
 ---
 
-> After this, your project is part of the launchpad ecosystem.
+## Phase 5 — Verify and commit
+
+- [ ] Run `.launchpad/sync.sh` — should say "Everything up to date"
+- [ ] Verify workflows exist:
+      - `.github/workflows/enforce-issue-link.yml`
+      - `.github/workflows/pr-labels.yml`
+- [ ] Review all changes: `git diff` and `git status`
+- [ ] Commit: `git add -A && git commit -m "chore: adopt launchpad template"`
+- [ ] Delete this file: `git rm ADOPT.md && git commit -m "chore: remove adoption checklist"`
+- [ ] Tell the human: "Launchpad adopted. The agent workflow is now active.
+      Future template updates: run `.launchpad/sync.sh`"
+
+---
+
+> After this, the project is part of the launchpad ecosystem.
 > Future updates: `.launchpad/sync.sh` to check, `.launchpad/sync.sh --apply` to update.
