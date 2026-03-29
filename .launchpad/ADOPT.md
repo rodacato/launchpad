@@ -172,7 +172,42 @@ Show all proposed content to the human and wait for approval before writing.
 
 ---
 
-## Phase 5 — Verify and commit
+## Phase 5 — Bootstrap first sprint (optional)
+
+> Ask the human if they want to set up a sprint. Skip this phase if they prefer to start manually.
+
+- [ ] Ask the human: "Do you want to set up a sprint now?
+      If you have a roadmap, backlog, or know what to work on next, I can create
+      a milestone and initial issues so the workflow is ready to go."
+      **STOP and wait for the human to decide. If they say no, skip to Phase 6.**
+
+- [ ] Create the first milestone — ask for sprint name and duration:
+      ```
+      gh api repos/{owner}/{repo}/milestones \
+        -f title="Sprint 1 — {description}" \
+        -f due_on="YYYY-MM-DDT00:00:00Z"
+      ```
+
+- [ ] Create issues based on what the human wants to work on:
+      Ask: "What are the first 3-5 things you want to tackle?"
+      For each item:
+      ```
+      gh issue create --title "..." --body "..." --label "feature" \
+        --milestone "Sprint 1 — {description}"
+      ```
+
+- [ ] If the project has a board, add issues to it:
+      ```
+      gh project item-add {PROJECT_NUMBER} --owner {org} \
+        --url https://github.com/{owner}/{repo}/issues/{N}
+      ```
+
+- [ ] Report: "Sprint 1 created with N issues. The agent workflow will pick these up
+      on the next session."
+
+---
+
+## Phase 6 — Verify and commit
 
 - [ ] Verify sync works:
       ```
