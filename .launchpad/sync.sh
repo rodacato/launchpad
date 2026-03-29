@@ -52,7 +52,7 @@ echo "Update available: v$LOCAL_VERSION → v$REMOTE_VERSION"
 echo ""
 
 # Parse managed files from manifest
-MANAGED_FILES=$(awk '/^managed:$/,/^[^ #]/' "$MANIFEST" | grep '^ *- ' | sed 's/^ *- //')
+MANAGED_FILES=$(awk '/^managed:$/,0' "$MANIFEST" | grep '^ *- ' | sed 's/^ *- //')
 
 UPDATES=0
 ERRORS=0
