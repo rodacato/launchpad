@@ -60,16 +60,16 @@ An issue is done when:
 
 ```bash
 # Unit + integration tests
-<!-- e.g. pnpm test, npm test, bundle exec rspec -->
+# e.g. pnpm test, npm test, bundle exec rspec
 
 # E2E tests
-<!-- e.g. pnpm test:e2e, npx playwright test -->
+# e.g. pnpm test:e2e, npx playwright test
 
 # Type checking
-<!-- e.g. pnpm typecheck, mypy, sorbet -->
+# e.g. pnpm typecheck, mypy, sorbet
 
 # Lint
-<!-- e.g. pnpm lint, rubocop, ruff -->
+# e.g. pnpm lint, rubocop, ruff
 ```
 
 ---

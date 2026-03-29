@@ -6,7 +6,7 @@
 >
 > **Phases 0–2 do NOT require the devcontainer** — they are conversational exploration
 > and file editing. Phase 2 ends by configuring the devcontainer based on decisions made.
-> **Phases 3–5 run INSIDE the devcontainer** after a rebuild.
+> **Phases 3–4 run INSIDE the devcontainer** after a rebuild.
 
 > **Checkpoint rule**: After completing each step, IMMEDIATELY mark its checkbox.
 > This is your recovery mechanism — if context is lost mid-session, checkboxes
@@ -123,14 +123,16 @@
       - Node → `"ghcr.io/devcontainers/features/node:1": { "version": "22" }`
       - Go → `"ghcr.io/devcontainers/features/go:1": { "version": "1.22" }`
       See https://containers.dev/features for the full catalog.
+      When uncommenting a feature, add a trailing comma to the preceding entry.
       The Dockerfile should remain minimal — only add system-level dependencies
       that don't have a devcontainer feature equivalent.
 - [ ] Update `.devcontainer/docker-compose.yml` — uncomment services the project needs (db, redis)
-- [ ] Update `.env.example` — customize the template based on Architecture decisions:
-      - If Postgres enabled → uncomment the database variables
-      - If Redis enabled → uncomment the Redis variables
-      - Add any app-specific vars the Architecture defined (API keys, ports, etc.)
-      - Ensure variable names match what the code will expect
+- [ ] Create `.env.example` based on Architecture decisions:
+      Add variable names with comments, no real values. Examples:
+      - If Postgres enabled → `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`
+      - If Redis enabled → `REDIS_URL`
+      - Add any app-specific vars (API keys, ports, etc.)
+      Format: `# Description\nVAR_NAME=` (empty values, human fills them)
 - [ ] Tell the human:
       ```
       Environment configured. Next steps:
@@ -169,8 +171,8 @@
       ```
       If any required tool is missing or not the expected version, fix it before continuing.
 - [ ] **Workflow** (`docs/WORKFLOW.md`):
-      The core process (GitHub Issues, Milestones, build cycle) is already defined.
-      Customize for this project based on the Architecture:
+      The base process is defined in `.launchpad/WORKFLOW.md` — read it first.
+      Then customize `docs/WORKFLOW.md` for this project based on the Architecture:
       fill in the test strategy (layers, what to mock, commands),
       update the definition of done (testing, linting, type checking commands),
       update the documentation map with actual file locations,
@@ -220,7 +222,7 @@
       3. "Pull request merged" → set status to "Done" → save
       ```
       These handle board status automatically — no PATs or secrets needed.
-- [ ] Create labels that `docs/WORKFLOW.md` references (use `--force` to update if they already exist):
+- [ ] Create labels that `.launchpad/WORKFLOW.md` references (use `--force` to update if they already exist):
       ```
       gh label create "feature" --color "0E8A16" --description "New functionality" --force
       gh label create "bug" --color "D73A4A" --description "Something broken" --force
@@ -270,8 +272,8 @@
       Generate the license file. If unsure, recommend MIT for open source or skip for private.
 - [ ] **CONTRIBUTING.md** — Generate based on the project's setup:
       - How to set up the dev environment (from `.devcontainer/`)
-      - Branch naming and commit conventions (from `docs/WORKFLOW.md`)
-      - How to open a PR (from `docs/WORKFLOW.md`)
+      - Branch naming and commit conventions (from `.launchpad/WORKFLOW.md`)
+      - How to open a PR (from `.launchpad/WORKFLOW.md`)
       - Code style and testing expectations (from `docs/WORKFLOW.md` definition of done)
       Show the human and ask for approval.
 - [ ] **SECURITY.md** — Generate a vulnerability reporting policy:
@@ -300,6 +302,17 @@
 - [ ] Make sure `.env` is in `.gitignore` and NOT staged
 - [ ] Commit the initialization:
       `git add -A && git commit -m "chore: initialize project from launchpad"`
+- [ ] **Pre-protection cleanup** — do this NOW before branch protection blocks direct pushes:
+      - Scan all `docs/*.md` for unfilled `<!-- placeholder -->` or `<!-- e.g.` comments.
+        If any remain, the doc is incomplete — go back and fill it.
+      - Verify `CLAUDE.md` has no placeholder fields (name, purpose, stack, stage all filled).
+      - Verify `README.md` has no `<!-- placeholder -->` or `<!-- org/repo -->` left.
+      - Remove `<!-- AGENT INSTRUCTIONS ... -->` blocks from every `docs/*.md` file.
+      - Remove `START_HERE.md` from the `CLAUDE.md` repo structure tree.
+      - Remove the `IF START_HERE.md exists` block from `.launchpad/AGENTS.md` startup behavior.
+        Keep only the `ELSE` branch as the default (remove the `ELSE (established project):` label too — just start with the numbered steps directly).
+      - Delete `START_HERE.md`: `git rm START_HERE.md`
+      - Commit cleanup: `git add -A && git commit -m "chore: remove initialization scaffolding"`
 - [ ] Push to main: `git push origin main`
 - [ ] Configure repository merge strategy — ask the human their preference:
       ```
@@ -338,29 +351,4 @@
 
 ---
 
-## Phase 5 — Cleanup
-
-> Final sweep: remove all scaffolding so the repo looks like a real project, not a template.
-
-- [ ] **Verification sweep** — check EVERY doc before cleaning:
-      - Scan all `docs/*.md` for unfilled `<!-- placeholder -->` or `<!-- e.g.` comments.
-        If any remain, the doc is incomplete — go back and fill it.
-      - Verify `CLAUDE.md` has no placeholder fields (name, purpose, stack, stage all filled).
-      - Verify `.notdefined.yml` has no `<!-- fill during` comments.
-      - Verify `README.md` has no `<!-- placeholder -->` or `<!-- org/repo -->` left.
-      - Report any issues to the human before proceeding.
-- [ ] Remove `<!-- AGENT INSTRUCTIONS ... -->` blocks from every `docs/*.md` file.
-      These are scaffolding for the init process — the filled content speaks for itself.
-- [ ] Remove `START_HERE.md` from the `CLAUDE.md` repo structure tree.
-- [ ] Remove the `IF START_HERE.md exists` block from `.launchpad/AGENTS.md` startup behavior.
-      Keep only the `ELSE` branch (established project flow) as the default.
-- [ ] Delete this `START_HERE.md`:
-      `git rm START_HERE.md`
-- [ ] Commit the cleanup:
-      `git add -A && git commit -m "chore: remove initialization scaffolding"`
-- [ ] Push: `git push origin main`
-- [ ] Tell the human: "Setup complete. Run 'gh issue list' to start the first sprint."
-
----
-
-> After this phase, this file no longer exists. Future work is tracked in GitHub Issues.
+> Setup is complete. Future work is tracked in GitHub Issues.
