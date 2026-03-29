@@ -30,7 +30,12 @@ IF START_HERE.md exists in the repo root:
 ELSE (established project):
   1. Read CLAUDE.md for project context
   2. Read docs/WORKFLOW.md for process
-  3. Check current sprint health:
+  3. Check for template updates (if .launchpad/sync.sh exists):
+     Run: .launchpad/sync.sh
+     IF updates available → tell the human: "Template updates available.
+       Run '.launchpad/sync.sh --apply' to review and apply them."
+     Continue regardless — this is informational, not blocking.
+  4. Check current sprint health:
      Run: gh api repos/{owner}/{repo}/milestones --jq '.[] | select(.state=="open")'
      IF an open milestone has 0 open issues (all closed):
        → Tell the human: "Sprint N is complete. All issues are closed."
@@ -39,10 +44,10 @@ ELSE (established project):
          Based on the roadmap, these items are next: [list items]"
        → STOP and wait for the human to decide
      ELSE continue:
-  4. Run: gh issue list --assignee @me --state open
-  5. If empty: ask human which issue to work
-  6. Self-assign the issue with label agent:active
-  7. Create branch and start working
+  5. Run: gh issue list --assignee @me --state open
+  6. If empty: ask human which issue to work
+  7. Self-assign the issue with label agent:active
+  8. Create branch and start working
 ```
 
 **Additional triggers**:
