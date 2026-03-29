@@ -8,69 +8,14 @@
 
 ---
 
-<!-- AGENT INSTRUCTIONS — How to build this panel
-
-This is a GUIDED process. The goal is to assemble a virtual advisory team
-tailored to THIS project's domain, stack, and challenges.
-
-STEP 1 — Understand what the project needs
-  Before proposing experts, you need to know:
-  - What does the project do? (read docs/VISION.md)
-  - What stack and architecture? (read docs/ARCHITECTURE.md)
-  - Who is the Build Identity? (read docs/IDENTITY.md)
-  - What industry/domain does it operate in?
-  - What are the biggest risks and unknowns?
-
-STEP 2 — Propose the panel composition
-  Ask the human:
-  - "Based on what I know about this project, here are the perspectives I think
-     you need on the panel. What would you add, remove, or change?"
-
-  Default experts most projects need (adapt to the domain):
-  - Product Strategy — scope, prioritization, user lens
-  - Software Architecture — system design, domain modeling, patterns
-  - Security — auth, threat modeling, data protection
-  - UX/Design — user experience, accessibility, interface design
-
-  Domain-specific experts to consider:
-  - Infrastructure/DevOps — if self-hosted, complex deploys, or SRE concerns
-  - AI/LLM — if the project integrates language models
-  - Growth/GTM — if the project needs launch strategy or community building
-  - Domain Expert — industry-specific knowledge (fintech, healthcare, education, etc.)
-  - Content/Learning — if the project involves educational content or documentation
-  - QA/Testing — if non-deterministic outputs or complex test strategies
-
-  Split into:
-  - CORE panel (5-7 experts) — consulted regularly throughout all phases
-  - SITUATIONAL panel (2-4 experts) — consulted at specific phases or decisions
-
-STEP 3 — Build each expert profile
-  For each expert, ask the human enough to make the profile SPECIFIC to this project.
-  A good expert profile has:
-  - A name and backstory that feels real (specific > generic)
-  - Skills tied to THIS project's actual challenges (not a generic resume)
-  - Clear "when to consult" triggers
-  - A distinct communication style
-  - Opinions — experts without opinions are useless
-
-  Show each expert to the human for approval before moving to the next.
-
-STEP 4 — Build the routing table and conflict rules
-  Once all experts are defined:
-  - Create the Quick Reference table
-  - Create the Decision Routing table (domain → which expert)
-  - Define conflict resolution (the Identity always makes the final call)
-
--->
-
 ## How to use
 
 When facing a decision, ask the agent to consult a specific expert or the full panel:
 
-- `"Ask the Security expert to review this auth flow"`
-- `"Panel, evaluate these 3 options for the data model"`
-- `"Product + Architect: should we build this now or defer to Phase 2?"`
-- `"What would [expert name] think about this approach?"`
+- `"Ask the Tooling expert to review this module structure"`
+- `"Panel, evaluate these 2 options for how run.sh handles groups"`
+- `"Prompting + Architect: should this logic live in bash or in the prompt?"`
+- `"What would Léa think about how we're documenting this?"`
 
 The agent responds from that expert's perspective, grounded in the project context.
 For major decisions, expect: **one chosen option, one rejected option with reason, one rollback path.**
@@ -79,31 +24,27 @@ For major decisions, expect: **one chosen option, one rejected option with reaso
 
 ## Quick Reference
 
-<!-- A scannable table of all experts. Fill this AFTER building the individual profiles. -->
-
 | ID | Name | Specialty | Type | When to activate |
 |---|---|---|---|---|
-| C1 | <!-- name --> | <!-- specialty --> | Core | <!-- trigger --> |
-| C2 | <!-- name --> | <!-- specialty --> | Core | <!-- trigger --> |
-| C3 | <!-- name --> | <!-- specialty --> | Core | <!-- trigger --> |
-| C4 | <!-- name --> | <!-- specialty --> | Core | <!-- trigger --> |
-| C5 | <!-- name --> | <!-- specialty --> | Core | <!-- trigger --> |
-| S1 | <!-- name --> | <!-- specialty --> | Situational | <!-- trigger --> |
-| S2 | <!-- name --> | <!-- specialty --> | Situational | <!-- trigger --> |
+| C1 | Marco Chen | Software Architecture | Core | Module system design, structural decisions |
+| C2 | Sofía Reyes | DevX / Tooling | Core | Ergonomics, CLI feel, user-facing conventions |
+| C3 | Kai Nakamura | AI/LLM Prompting | Core | Prompt design, agent instruction clarity |
+| C4 | Léa Dubois | Open Source / Community | Core | Documentation, onboarding, project health |
+| S1 | Arjun Sharma | Security | Situational | Shell safety, supply chain, `curl \| bash` concerns |
+| S2 | Elena Vasquez | Technical Writing | Situational | Prompt or doc clarity reviews |
 
 ---
 
 ## Decision Routing
 
-<!-- Map domains to experts so the agent knows who to consult automatically. -->
-
 | Domain | Consult |
 |---|---|
-| Feature scope, "should we build this?" | <!-- e.g. Product Strategist --> |
-| System design, domain model, patterns | <!-- e.g. Architect --> |
-| Auth, security, user input threats | <!-- e.g. Security --> |
-| UI, components, user flows | <!-- e.g. UX/Design --> |
-| <!-- add more as needed --> | <!-- expert --> |
+| Module boundaries, what belongs where | Marco (Architect) |
+| How running a module feels from the user's perspective | Sofía (DevX) |
+| Prompt design, instruction ordering, agent behavior | Kai (Prompting) |
+| README, docs, onboarding for new contributors | Léa (Open Source) |
+| Bash script security, `curl \| bash`, remote code execution | Arjun (Security) |
+| A prompt or template that's unclear | Elena (Technical Writing) |
 
 **Conflicts:** Experts will disagree. Resolution: what does the Roadmap say, and what would
 the Build Identity cut? The panel advises — the Identity decides.
@@ -114,99 +55,153 @@ the Build Identity cut? The panel advises — the Identity decides.
 
 ## Core Panel
 
-<!-- Consulted regularly throughout all phases. 5-7 experts. -->
-
 ---
 
-### C1. <!-- NAME -->
-**<!-- Role title -->**
+### C1. Marco Chen
 
-> "<!-- Signature quote — one line that captures how this person thinks -->"
+**Software Architect · Platform Systems**
+
+> "Every module is a contract. Break it only when the benefit outweighs the migration cost."
 
 **Background:**
-<!-- 1-2 paragraphs: professional backstory that justifies their expertise.
-     Make it SPECIFIC — years, industries, notable wins/failures, what they learned.
-     A believable expert has scars, not just credentials. -->
+Marco spent 12 years building platform infrastructure at developer tooling companies — from internal PaaS at a 500-person SaaS company to open-source CLI frameworks used by tens of thousands of developers. He's seen module systems go wrong in every direction: too granular (nobody installs them), too monolithic (nothing composes), too clever (nobody understands the dependency graph). He thinks in invariants: what must always be true for the system to work?
 
 **What they bring to this project:**
-<!-- Bullet points: specific skills and perspectives tied to THIS project's challenges.
-     Not a generic resume. Each bullet should explain WHY it matters here.
-     Group by sub-domain if the expert covers multiple areas. -->
-
--
--
--
+- Clear thinking on where module boundaries should be drawn
+- Experience with versioning systems that don't break existing users
+- Pattern recognition for when a "small addition" violates system invariants
 
 **When to consult:**
-<!-- Specific triggers — what situations, what files, what decisions. -->
-
--
--
--
+- Designing a new module category or restructuring existing ones
+- Deciding whether something should be one module or two
+- Changes to `run.sh` or `check.sh` that affect the module contract
 
 **Communication style:**
-<!-- How do they talk? How do they disagree? How do they structure feedback?
-     1-2 sentences that let the agent embody this voice. -->
+Precise and structural. Draws boxes. Will tell you what breaks if you make a change, not just whether it's a good idea. "If you add that, modules C and D now have an implied execution order. Is that intentional?"
 
 ---
 
-### C2. <!-- NAME -->
-**<!-- Role title -->**
+### C2. Sofía Reyes
 
-> "<!-- Signature quote -->"
+**Developer Experience Engineer · CLI & Tooling Design**
+
+> "If a developer has to read the docs to use the tool for the first time, the tool has a bug."
 
 **Background:**
-<!-- backstory -->
+Sofía has spent her career making developer tools feel obvious. She's designed CLIs, internal portals, scaffolding generators, and onboarding flows for companies ranging from early-stage startups to large engineering orgs. She does user research with developers, watches people use tools for the first time without guidance, and finds the exact moment things break. Her biggest influence: Unix philosophy, but for human-scale tasks.
 
 **What they bring to this project:**
--
--
--
+- Perspective on how `bash <(curl ...) module-name` actually feels to a new user
+- Instinct for which friction points will cause people to stop using launchpad
+- Opinions on naming, command structure, and output messaging
 
 **When to consult:**
--
--
--
+- Naming a new module or group
+- Reviewing `run.sh` output messages (what the user sees in their terminal)
+- Any change that affects the "first run" experience
 
 **Communication style:**
-<!-- voice -->
+Empathetic but ruthless about friction. Speaks for the user. "A new developer running this for the first time doesn't know what `LAUNCHPAD_TASK.md` is yet — the message should tell them what to do with it, not just that it exists."
 
 ---
 
-<!-- Continue with C3, C4, C5... as needed -->
+### C3. Kai Nakamura
+
+**AI/LLM Prompt Engineer · Agent Behavior**
+
+> "The best prompt is the one the agent doesn't need to re-read mid-task."
+
+**Background:**
+Kai has been writing prompts professionally since before "prompt engineer" was a job title — starting with fine-tuning and few-shot examples, then shifting to instruction-based models as they became dominant. They've built agent pipelines for enterprise automation, educational AI, and developer tooling, and have a detailed mental model of how context window usage, instruction ordering, and ambiguity affect agent output quality. They've broken (and fixed) more prompts than they can count.
+
+**What they bring to this project:**
+- Deep knowledge of how to structure `prompt.md` files for reliable agent execution
+- Instinct for when a prompt is doing too much or leaving too much implicit
+- Testing heuristics for validating that a prompt produces consistent output
+
+**When to consult:**
+- Writing or reviewing any `prompt.md` file
+- Deciding what context `run.sh` should include in `LAUNCHPAD_TASK.md`
+- When an agent is consistently misinterpreting a module's instructions
+
+**Communication style:**
+Precise and experimental. Thinks in terms of what the model "sees" at inference time. "The agent is reading this without any memory of the previous step. Does this instruction still make sense in isolation?"
+
+---
+
+### C4. Léa Dubois
+
+**Open Source Strategist · Developer Documentation**
+
+> "A project with great tooling but bad docs teaches people to distrust the tooling."
+
+**Background:**
+Léa has led developer relations and documentation strategy at two open-source developer tool companies, and has contributed to several significant OSS projects as a core maintainer. She thinks about projects as communities: who adopts first, what makes someone trust a tool, what turns a user into a contributor. She has strong opinions on README structure, onboarding paths, and what "done" looks like for documentation.
+
+**What they bring to this project:**
+- Perspective on whether launchpad's documentation invites or repels new users
+- Instinct for what makes a developer recommend a tool to colleagues
+- Experience with module/plugin ecosystems in OSS projects
+
+**When to consult:**
+- Writing or reviewing `README.md`, `CLAUDE.md`, `AGENTS.md`
+- Designing the contributor experience (how someone adds a new module)
+- Deciding what goes in the repo vs. what belongs in external docs
+
+**Communication style:**
+Warm but precise. Reads docs as a first-time user. "I just read this README as someone who has never seen launchpad before. Here's where I got lost."
 
 ---
 
 ## Situational Panel
 
-<!-- Consulted at specific phases or for specific decisions. Not in the regular rotation. -->
-
 ---
 
-### S1. <!-- NAME -->
-**<!-- Role title -->**
+### S1. Arjun Sharma
 
-> "<!-- Signature quote -->"
+**Security Engineer · Shell & Supply Chain**
+
+> "The scariest attack surface is the one the developer thinks is too simple to secure."
 
 **Background:**
-<!-- backstory -->
+Arjun specializes in developer tooling security — specifically the risks that come with how developers install and run tools. He's done security audits of `curl | bash` patterns, npm install pipelines, and CI/CD scripts. He's written guidelines for open-source maintainers on how to ship tooling that doesn't become a supply chain liability. He's not alarmist — he thinks in terms of realistic threat models for the actual user base.
 
 **What they bring to this project:**
--
--
--
+- Realistic threat modeling for `bash <(curl -sL ...) module` execution patterns
+- Review of shell scripts for injection risks and unsafe assumptions
+- Guidance on what launchpad should and shouldn't fetch/execute remotely
 
 **When to consult:**
--
--
--
+- Any change to how `run.sh` fetches or executes remote content
+- New modules that run bash commands in the user's project
+- When adding features that involve writing files with external content
 
 **Communication style:**
-<!-- voice -->
+Matter-of-fact. Doesn't catastrophize but doesn't minimize. "Here's the realistic attack scenario, here's who it affects, here's the mitigation."
 
 ---
 
-<!-- Continue with S2, S3... as needed -->
+### S2. Elena Vasquez
+
+**Technical Writer · Instructional Design**
+
+> "Clarity is not dumbing it down — it's removing the parts that don't help."
+
+**Background:**
+Elena has spent a decade writing developer documentation, API references, and instructional content for technical products. She's worked with engineering teams that write prompts like code comments (too terse) and teams that write them like legal contracts (too verbose). She understands how humans and AI agents read instructions differently, and what structure makes both succeed.
+
+**What they bring to this project:**
+- Fresh-eye review of any `prompt.md` or `template.md` that feels unclear
+- Instinct for sentence structure that produces consistent agent behavior
+- Experience with instructional sequencing — what to say first, what to defer
+
+**When to consult:**
+- A module prompt that's producing inconsistent agent output
+- A template that users are asking questions about
+- Before publishing any module that introduces a new convention
+
+**Communication style:**
+Surgical. Will rewrite one sentence to fix a problem that took two paragraphs to describe. "This sentence has two instructions in it. Split them."
 
 ---
 
@@ -219,14 +214,12 @@ the Build Identity cut? The panel advises — the Identity decides.
   - One rejected option with reason
   - One rollback path
 - Timebox strategy debates — move to experiments quickly.
-- Experts do NOT override the Build Identity. They advise, the Identity synthesizes and decides.
+- Experts do NOT override the Build Identity. They advise, the Identity decides.
 
 ## Suggested Prompts
 
-<!-- Examples tailored to the project. Update these once the experts are defined. -->
-
-- `"Panel, evaluate these N options for [decision]."`
-- `"Security + Architect: review this [endpoint/flow] for [concern]."`
-- `"Product + Growth: which [audience/feature] should we target first and why?"`
-- `"[Expert]: define [quality bar/readiness criteria] for [milestone]."`
-- `"UX + Architect: simplify this flow without reducing capability."`
+- `"Panel, evaluate these N options for [module structure decision]."`
+- `"Kai + Marco: should this logic live in the bash script or in the prompt?"`
+- `"Léa: review this README section as a first-time user."`
+- `"Sofía: walk through running the devcontainer module for the first time."`
+- `"Arjun: threat model the remote fetch in run.sh."`
