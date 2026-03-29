@@ -17,6 +17,11 @@
 .
 ├── .devcontainer/     # Dev environment (Docker + Claude Code + GitHub CLI)
 ├── .github/           # Issue templates, workflows, PR template
+├── .launchpad/        # Template-managed files (synced from launchpad)
+│   ├── AGENTS.md          # Base agent roles and behavior
+│   ├── WORKFLOW.md        # Base process (sprints, PRs, automations)
+│   ├── manifest.yml       # Template version and managed file list
+│   └── sync.sh            # Template sync script
 ├── src/               # Application code
 ├── tests/             # Test suite
 ├── docs/
@@ -26,19 +31,19 @@
 │   ├── ROADMAP.md         # Phases, milestones, risks
 │   ├── BRANDING.md        # Name, voice, visual identity
 │   ├── EXPERTS.md         # AI expert panel for decisions
-│   ├── WORKFLOW.md        # How work is organized (sprints, issues, PRs)
+│   ├── WORKFLOW.md        # Project-specific workflow customizations
 │   ├── branding/          # Logo, icons, OG images
 │   ├── guides/            # Operational guides (releasing, etc.)
 │   └── screenshots/       # App screenshots for showroom
 ├── CLAUDE.md          # ← you are here
-├── AGENTS.md          # Agent roles and instructions
+├── AGENTS.md          # Project-specific agent overrides
 ├── START_HERE.md      # Init guide (deleted after setup)
 └── README.md          # Human-facing documentation
 ```
 
 ## How to start a session
 
-1. Read `docs/WORKFLOW.md` to understand how issues and sprints work
+1. Read `.launchpad/WORKFLOW.md` (base process) then `docs/WORKFLOW.md` (project specifics)
 2. Run `gh issue list --assignee @me --state open` to see your active issues
 3. If no issues assigned, run `gh issue list --state open --limit 10` and ask which to work
 4. Never start work without an associated issue number

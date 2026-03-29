@@ -1,6 +1,6 @@
 # START_HERE.md — Project initialization
 
-> **For the agent**: Read `AGENTS.md` before this file. When starting fresh in this repo,
+> **For the agent**: Read `.launchpad/AGENTS.md` before this file. When starting fresh in this repo,
 > work through these steps in order. Check each box as you complete it.
 > Do not skip steps. Do not start feature work until all phases are complete.
 >
@@ -25,7 +25,7 @@
 
 > Understand what we're building. Minimal file edits — just capturing identity.
 
-- [ ] Read `CLAUDE.md`, `docs/WORKFLOW.md`, and `AGENTS.md` for context
+- [ ] Read `CLAUDE.md`, `.launchpad/WORKFLOW.md`, and `.launchpad/AGENTS.md` for context
 - [ ] Ask the human: "What is this project? Name, purpose, one sentence."
 - [ ] Ask the human: "Who is it for? What problem does it solve?"
 - [ ] Fill in the `## Project identity` section in `CLAUDE.md` (name, purpose, stage).
@@ -352,7 +352,7 @@
 - [ ] Remove `<!-- AGENT INSTRUCTIONS ... -->` blocks from every `docs/*.md` file.
       These are scaffolding for the init process — the filled content speaks for itself.
 - [ ] Remove `START_HERE.md` from the `CLAUDE.md` repo structure tree.
-- [ ] Remove the `IF START_HERE.md exists` block from `AGENTS.md` startup behavior.
+- [ ] Remove the `IF START_HERE.md exists` block from `.launchpad/AGENTS.md` startup behavior.
       Keep only the `ELSE` branch (established project flow) as the default.
 - [ ] Delete this `START_HERE.md`:
       `git rm START_HERE.md`

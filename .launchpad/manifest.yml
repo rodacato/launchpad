@@ -3,7 +3,7 @@
 # Project-owned files (docs/VISION.md, docs/ARCHITECTURE.md, etc.) are NEVER synced.
 
 # Template version — bump on every release to launchpad
-version: "0.2.0"
+version: "0.3.0"
 
 # Source repository for updates
 source: rodacato/launchpad
@@ -11,9 +11,9 @@ branch: master
 
 # Template-managed files — these get updated from launchpad
 managed:
-  # Agent behavior and workflow
-  - AGENTS.md
-  - docs/WORKFLOW.md
+  # Base process and agent roles (project overrides are in AGENTS.md and docs/WORKFLOW.md)
+  - .launchpad/AGENTS.md
+  - .launchpad/WORKFLOW.md
 
   # GitHub workflows
   - .github/workflows/enforce-issue-link.yml
@@ -32,6 +32,8 @@ managed:
 
 # Project-owned files — NEVER synced (listed for documentation only)
 # - CLAUDE.md
+# - AGENTS.md                    (project overrides)
+# - docs/WORKFLOW.md              (project customizations)
 # - docs/VISION.md
 # - docs/IDENTITY.md
 # - docs/EXPERTS.md
