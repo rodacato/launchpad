@@ -57,6 +57,7 @@
 - Do not close issues manually — they close via PR merge (`closes #N`)
 - Do not modify `.env` or secrets — ask the human
 - Do not install global dependencies without noting them in the PR
+- Do not add Co-Authored-By lines or "Generated with" attributions in commits, PRs, or issues
 
 ## Environment
 
