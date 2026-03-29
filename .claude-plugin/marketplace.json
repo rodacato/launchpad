@@ -1,0 +1,18 @@
+{
+  "name": "rodacato-marketplace",
+  "description": "rodacato personal plugins",
+  "owner": {
+    "name": "rodacato"
+  },
+  "plugins": [
+    {
+      "name": "launchpad",
+      "description": "Modular project setup — atomic skills for creating and updating project docs, configs, and workflows",
+      "version": "0.5.0",
+      "source": "./",
+      "author": {
+        "name": "rodacato"
+      }
+    }
+  ]
+}

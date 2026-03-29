@@ -1,0 +1,21 @@
+{
+  "name": "launchpad",
+  "description": "Modular project setup — atomic skills for creating and updating project docs, configs, and workflows",
+  "version": "0.5.0",
+  "author": {
+    "name": "rodacato",
+    "email": "rodacato@gmail.com"
+  },
+  "homepage": "https://github.com/rodacato/launchpad",
+  "repository": "https://github.com/rodacato/launchpad",
+  "license": "MIT",
+  "keywords": [
+    "project-setup",
+    "docs",
+    "workflow",
+    "devcontainer",
+    "github",
+    "bootstrapping",
+    "templates"
+  ]
+}

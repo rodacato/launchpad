@@ -1,127 +1,63 @@
 # Launchpad
 
-> Modular project bootstrapping for AI-assisted development.
+> Claude Code plugin — atomic skills for project bootstrapping and documentation.
 
-Launchpad is a collection of independent modules. Each one guides an AI agent through creating or updating a specific document or configuration in your project. You pick what you need, run it, and the agent does the work.
+16 independent skills. Each one creates or updates a specific document or configuration
+in your project. Run one, get a result. Iterate from there.
 
-## How it works
-
-1. Run a module from your project root:
-
-```bash
-bash <(curl -sL https://raw.githubusercontent.com/rodacato/launchpad/master/scripts/run.sh) <module>
-```
-
-1. This creates `LAUNCHPAD_TASK.md` with context-aware instructions for the agent
-1. Tell Claude Code: **"read LAUNCHPAD_TASK.md and execute it"**
-
-The bash script prepares context (what files exist, what version is installed). The agent does the actual work.
-
----
-
-## New project
+## Install
 
 ```bash
-# 1. Create a repo on GitHub, clone it, cd into it
-
-# 2. Run the concept group — defines what you're building
-bash <(curl -sL https://raw.githubusercontent.com/rodacato/launchpad/master/scripts/run.sh) concept
-
-# 3. Tell Claude Code: "read LAUNCHPAD_TASK.md and execute it"
-
-# 4. Add more modules as the project takes shape
-bash <(curl -sL https://raw.githubusercontent.com/rodacato/launchpad/master/scripts/run.sh) github
-bash <(curl -sL https://raw.githubusercontent.com/rodacato/launchpad/master/scripts/run.sh) devcontainer
+claude plugin marketplace add git@github.com:rodacato/launchpad.git
+claude plugin install launchpad@rodacato-marketplace
 ```
 
----
+## Usage
 
-## Available modules
-
-### Docs
-
-| Module | Creates | Group |
-| --- | --- | --- |
-| `vision` | `docs/VISION.md` | concept |
-| `identity` | `docs/IDENTITY.md` | concept |
-| `experts` | `docs/EXPERTS.md` | concept |
-| `architecture` | `docs/ARCHITECTURE.md` | technical |
-| `roadmap` | `docs/ROADMAP.md` | technical |
-| `branding` | `docs/BRANDING.md` | — |
-| `workflow` | `docs/WORKFLOW.md` | process |
-| `agents` | `AGENTS.md` | process |
-| `notdefined` | `.notdefined.yml` | — |
-
-### CI
-
-| Module | Creates | Group |
-| --- | --- | --- |
-| `github` | labels + workflows + issue templates + project board | — |
-
-### Infrastructure
-
-| Module | Creates | Group |
-| --- | --- | --- |
-| `devcontainer` | `.devcontainer/` | — |
-| `kamal` | `config/deploy.yml` | — |
-| `caddy` | `Caddyfile` | — |
-
-### Process
-
-| Module | Creates | Group |
-| --- | --- | --- |
-| `releasing` | `docs/guides/releasing.md` | — |
-| `contributing` | `CONTRIBUTING.md` | — |
-| `changelog` | `CHANGELOG.md` | — |
-
----
-
-## Groups
-
-Run multiple related modules in one command:
-
-```bash
-bash <(curl -sL .../run.sh) concept    # vision + identity + experts
-bash <(curl -sL .../run.sh) technical  # architecture + roadmap
-bash <(curl -sL .../run.sh) process    # workflow + agents
-```
-
-Replace `...` with `https://raw.githubusercontent.com/rodacato/launchpad/master/scripts`.
-
----
-
-## Updating a module
-
-Re-run any module on a project that already has it. The agent compares the current doc with the template, adds missing sections, and preserves your existing content.
-
-```bash
-bash <(curl -sL https://raw.githubusercontent.com/rodacato/launchpad/master/scripts/run.sh) experts
-```
-
----
-
-## Check module status
-
-```bash
-bash <(curl -sL https://raw.githubusercontent.com/rodacato/launchpad/master/scripts/check.sh)
-```
-
-Shows installed versions, remote versions, and what's outdated:
+From any project:
 
 ```text
-Module          Local    Remote   Status
-────────────────────────────────────────────────────────
-experts         1.0      1.2      ↑ update available
-identity        1.0      1.0      ✓ up to date
-workflow        —        2.0      ✗ not installed
+/launchpad:vision        # Create or update VISION.md
+/launchpad:identity      # Create or update IDENTITY.md
+/launchpad:experts       # Create or update EXPERTS.md
+/launchpad:architecture  # Create or update ARCHITECTURE.md
+/launchpad:roadmap       # Create or update ROADMAP.md
+/launchpad:workflow      # Create or update WORKFLOW.md
+/launchpad:agents        # Create or update AGENTS.md
+/launchpad:branding      # Create or update BRANDING.md
+/launchpad:notdefined    # Create or update .notdefined.yml
+/launchpad:github        # Configure GitHub labels, workflows, board
+/launchpad:devcontainer  # Create or update .devcontainer/
+/launchpad:kamal         # Create or update config/deploy.yml
+/launchpad:caddy         # Create or update Caddyfile
+/launchpad:releasing     # Create or update docs/guides/releasing.md
+/launchpad:contributing  # Create or update CONTRIBUTING.md
+/launchpad:changelog     # Create or update CHANGELOG.md
 ```
 
----
+Each skill handles both create (from scratch) and update (preserve + extend) cases.
 
-## Leaving Launchpad
+## Structure
 
-```bash
-rm -rf .launchpad/
+```text
+skills/
+  {name}/
+    SKILL.md      ← agent instructions (create + update)
+    template.md   ← blank document template
+    VERSION       ← semver string
+.claude-plugin/
+  plugin.json
+  marketplace.json
 ```
 
-Everything outside `.launchpad/` is yours. Nothing breaks.
+## Tracking installed versions
+
+Skills record which version is installed in `.launchpad/manifest.yml` at the project root:
+
+```yaml
+source: rodacato/launchpad
+modules:
+  vision: "1.1"
+  experts: "1.1"
+  github: "1.0"
+```
