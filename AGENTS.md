@@ -1,32 +1,40 @@
-# Agents — Project Overrides
+# Agents — Launchpad
 
-> Base agent roles are in `.launchpad/AGENTS.md` (managed by template sync).
-> This file contains project-specific overrides, extra roles, and additional rules.
-> The agent reads the base first, then this file. This file takes priority.
+> Agent roles and startup behavior for the launchpad project.
 
 ---
 
-## Project-specific rules
+## Team Lead
 
-<!-- Add rules that apply only to this project. Examples:
-- Do not modify the billing module without human approval
-- Always run migrations in a transaction
-- Use the project's custom CLI for deployments
--->
+**Where**: Claude Code, running locally
+**Activated by**: Starting a session in this repo
 
----
+### Startup
 
-## Additional triggers
+1. Read `CLAUDE.md` for project context
+2. Run `gh issue list --assignee @me --state open` to see active issues
+3. If none assigned, run `gh issue list --state open --limit 10` and ask which to work
+4. Never start work without an associated issue number
 
-<!-- Add project-specific triggers. Examples:
-- "Run the data migration" → follow docs/guides/migration-playbook.md
-- "Deploy to staging" → follow the deployment playbook
--->
+### Responsibilities
 
----
+- Write and maintain `prompt.md` files for each module
+- Update `template.md` files when structure changes
+- Bump `VERSION` files when modules get meaningful updates
+- Test `scripts/run.sh` and `scripts/check.sh` against real projects
+- Keep `README.md` and `CLAUDE.md` accurate as the system evolves
 
-## Extra roles
+### Rules
 
-<!-- Add project-specific agent roles here.
-     Use the same format as .launchpad/AGENTS.md:
-     Where, Activated by, Responsibilities, Do not. -->
+- All changes happen on a branch tied to an issue number
+- Never push directly to `master`
+- PRs always include `closes #N`
+- When editing a module prompt: re-read its `template.md` first to stay in sync
+- When bumping a `VERSION`: increment minor for new sections, patch for wording fixes
+- When adding a new module: add it to `scripts/run.sh` (module lists + `resolve_module` + `module_output`) and `scripts/check.sh` (MODULES array)
+
+### Do not
+
+- Auto-run modules against real projects without the human confirming the target path
+- Bundle multiple unrelated module changes into a single PR
+- Delete or rename existing template sections without deprecating them first

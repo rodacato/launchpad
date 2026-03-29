@@ -5,47 +5,30 @@
 
 ## Project identity
 
-**Name**: <!-- project name -->
-**Purpose**: <!-- one sentence -->
-**Stack**: <!-- e.g. Ruby 3.3 / Roda / Postgres 16 -->
-**Stage**: <!-- prototype | active | maintenance -->
-**GitHub Project Number**: <!-- set during Phase 3b, used for board status updates -->
+**Name**: Launchpad
+**Purpose**: Modular project setup system — composable modules that guide an AI agent through creating project docs, configuring infrastructure, and standardizing workflows
+**Stack**: Bash + Markdown
+**Stage**: active
+**GitHub Project Number**: <!-- set after creating project board -->
 
 ## Repository structure
 
-```
+```text
 .
-├── .devcontainer/     # Dev environment (Docker + Claude Code + GitHub CLI)
-├── .github/           # Issue templates, workflows, PR template
-├── .launchpad/        # Template-managed files (synced from launchpad)
-│   ├── AGENTS.md          # Base agent roles and behavior
-│   ├── WORKFLOW.md        # Base process (sprints, PRs, automations)
-│   └── manifest.yml       # Template version and source
-├── src/               # Application code
-├── tests/             # Test suite
-├── docs/
-│   ├── VISION.md          # Problem, goals, success metrics
-│   ├── IDENTITY.md        # Who builds this and for whom
-│   ├── ARCHITECTURE.md    # Tech stack, system design, ADRs
-│   ├── ROADMAP.md         # Phases, milestones, risks
-│   ├── BRANDING.md        # Name, voice, visual identity
-│   ├── EXPERTS.md         # AI expert panel for decisions
-│   ├── WORKFLOW.md        # Project-specific workflow customizations
-│   ├── branding/          # Logo, icons, OG images
-│   ├── guides/            # Operational guides (releasing, etc.)
-│   └── screenshots/       # App screenshots for showroom
+├── modules/
+│   ├── docs/              # Documentation modules (vision, identity, experts, etc.)
+│   ├── ci/                # CI/GitHub modules (github, labels, workflows, board)
+│   ├── infra/             # Infrastructure modules (devcontainer, kamal, caddy)
+│   └── process/           # Process modules (releasing, contributing, changelog)
+├── scripts/
+│   ├── run.sh             # Module runner — creates LAUNCHPAD_TASK.md
+│   └── check.sh           # Version checker — shows module status
+├── .launchpad/
+│   └── manifest.yml       # Installed module versions (for launchpad itself)
 ├── CLAUDE.md          # ← you are here
-├── AGENTS.md          # Project-specific agent overrides
-├── START_HERE.md      # Init guide (deleted after setup)
-└── README.md          # Human-facing documentation
+├── AGENTS.md          # Agent roles and startup behavior
+└── README.md          # Tool documentation
 ```
-
-## How to start a session
-
-1. Read `.launchpad/WORKFLOW.md` (base process) then `docs/WORKFLOW.md` (project specifics)
-2. Run `gh issue list --assignee @me --state open` to see your active issues
-3. If no issues assigned, run `gh issue list --state open --limit 10` and ask which to work
-4. Never start work without an associated issue number
 
 ## Core conventions
 
@@ -74,6 +57,7 @@ git --version
 
 ## Project-specific notes
 
-<!-- Add anything the agent needs to know: external APIs, quirks, constraints -->
-<!-- Example: "The embeddings API has a 100 req/min rate limit" -->
-<!-- Example: "Always run `bundle exec rspec` before opening a PR" -->
+- When editing a module, always read `modules/{category}/{name}/template.md` alongside `prompt.md` — they must stay in sync
+- Test `scripts/run.sh` changes by running them against a local test project, not this repo
+- `VERSION` files contain only a semver string (e.g. `1.0`) — no newlines, no extra content
+- The `scripts/check.sh` MODULES array and `scripts/run.sh` module lists must be kept in sync when adding or removing modules

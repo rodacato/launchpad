@@ -1,200 +1,127 @@
 # Launchpad
 
-> Standardized project bootstrapping with AI-assisted development workflows.
+> Modular project bootstrapping for AI-assisted development.
 
-<!-- TEMPLATE DOCS — remove this entire section during project setup (Phase 4) -->
+Launchpad is a collection of independent modules. Each one guides an AI agent through creating or updating a specific document or configuration in your project. You pick what you need, run it, and the agent does the work.
 
-## How to use Launchpad
+## How it works
 
-### New project (start from scratch)
-
-1. Click **"Use this template"** → "Create a new repository" on GitHub
-2. Clone the new repo and open in VS Code
-3. The agent detects `START_HERE.md` and walks you through the full setup
-4. Result: docs, devcontainer, workflows, board, sprint — all configured
-
-### Existing project (add the process layer)
+1. Run a module from your project root:
 
 ```bash
-# Run from your project root
-curl -sL https://raw.githubusercontent.com/rodacato/launchpad/master/scripts/install.sh | bash
+bash <(curl -sL https://raw.githubusercontent.com/rodacato/launchpad/master/scripts/run.sh) <module>
 ```
 
-What it does:
-- Creates `.launchpad/` with base workflow and agent roles (3 markdown files)
-- Copies GitHub workflows and issue templates (only if missing — never overwrites)
-- Drops `ADOPT.md` — the agent reads it and sets everything up interactively
+1. This creates `LAUNCHPAD_TASK.md` with context-aware instructions for the agent
+1. Tell Claude Code: **"read LAUNCHPAD_TASK.md and execute it"**
 
-What it does NOT do:
-- Modify any existing file
-- Delete anything
-- Push to remote
-- Run anything beyond copying files
+The bash script prepares context (what files exist, what version is installed). The agent does the actual work.
 
-You review with `git diff` before committing.
+---
 
-### Already using Launchpad (update)
+## New project
 
 ```bash
-# Same command — detects launchpad and syncs .launchpad/ files only
-curl -sL https://raw.githubusercontent.com/rodacato/launchpad/master/scripts/install.sh | bash
+# 1. Create a repo on GitHub, clone it, cd into it
+
+# 2. Run the concept group — defines what you're building
+bash <(curl -sL https://raw.githubusercontent.com/rodacato/launchpad/master/scripts/run.sh) concept
+
+# 3. Tell Claude Code: "read LAUNCHPAD_TASK.md and execute it"
+
+# 4. Add more modules as the project takes shape
+bash <(curl -sL https://raw.githubusercontent.com/rodacato/launchpad/master/scripts/run.sh) github
+bash <(curl -sL https://raw.githubusercontent.com/rodacato/launchpad/master/scripts/run.sh) devcontainer
 ```
 
-What it does:
-- Compares your `.launchpad/manifest.yml` version against the template
-- If outdated, downloads updated `.launchpad/*.md` files
-- Never touches anything outside `.launchpad/`
+---
 
-### Leave Launchpad
+## Available modules
+
+### Docs
+
+| Module | Creates | Group |
+| --- | --- | --- |
+| `vision` | `docs/VISION.md` | concept |
+| `identity` | `docs/IDENTITY.md` | concept |
+| `experts` | `docs/EXPERTS.md` | concept |
+| `architecture` | `docs/ARCHITECTURE.md` | technical |
+| `roadmap` | `docs/ROADMAP.md` | technical |
+| `branding` | `docs/BRANDING.md` | — |
+| `workflow` | `docs/WORKFLOW.md` | process |
+| `agents` | `AGENTS.md` | process |
+| `notdefined` | `.notdefined.yml` | — |
+
+### CI
+
+| Module | Creates | Group |
+| --- | --- | --- |
+| `github` | labels + workflows + issue templates + project board | — |
+
+### Infrastructure
+
+| Module | Creates | Group |
+| --- | --- | --- |
+| `devcontainer` | `.devcontainer/` | — |
+| `kamal` | `config/deploy.yml` | — |
+| `caddy` | `Caddyfile` | — |
+
+### Process
+
+| Module | Creates | Group |
+| --- | --- | --- |
+| `releasing` | `docs/guides/releasing.md` | — |
+| `contributing` | `CONTRIBUTING.md` | — |
+| `changelog` | `CHANGELOG.md` | — |
+
+---
+
+## Groups
+
+Run multiple related modules in one command:
+
+```bash
+bash <(curl -sL .../run.sh) concept    # vision + identity + experts
+bash <(curl -sL .../run.sh) technical  # architecture + roadmap
+bash <(curl -sL .../run.sh) process    # workflow + agents
+```
+
+Replace `...` with `https://raw.githubusercontent.com/rodacato/launchpad/master/scripts`.
+
+---
+
+## Updating a module
+
+Re-run any module on a project that already has it. The agent compares the current doc with the template, adds missing sections, and preserves your existing content.
+
+```bash
+bash <(curl -sL https://raw.githubusercontent.com/rodacato/launchpad/master/scripts/run.sh) experts
+```
+
+---
+
+## Check module status
+
+```bash
+bash <(curl -sL https://raw.githubusercontent.com/rodacato/launchpad/master/scripts/check.sh)
+```
+
+Shows installed versions, remote versions, and what's outdated:
+
+```text
+Module          Local    Remote   Status
+────────────────────────────────────────────────────────
+experts         1.0      1.2      ↑ update available
+identity        1.0      1.0      ✓ up to date
+workflow        —        2.0      ✗ not installed
+```
+
+---
+
+## Leaving Launchpad
 
 ```bash
 rm -rf .launchpad/
 ```
 
-That's it. Everything outside `.launchpad/` is yours — workflows, templates, docs. They keep working without launchpad.
-
-### What goes where
-
-| Location | Owner | Synced? | Purpose |
-|----------|-------|---------|---------|
-| `.launchpad/` | Launchpad template | Yes | Base process, agent roles, version |
-| `AGENTS.md` | Your project | Never | Project-specific agent overrides |
-| `docs/WORKFLOW.md` | Your project | Never | Definition of done, test strategy |
-| `.github/workflows/` | Your project | Never | Copied once, yours to customize |
-| Everything else | Your project | Never | Code, docs, config |
-
----
-
-<!-- END TEMPLATE DOCS -->
-
-# Project Name
-
-> One-line description of the project.
-
----
-
-## What is this
-
-This project was bootstrapped from [launchpad](https://github.com/rodacato/launchpad) — a template for starting new projects with standardized structure, AI-assisted development, and automated workflows.
-
-If you just cloned this template, start by reading `START_HERE.md` — it will guide you through the full setup process.
-
-## Stack
-
-Defined during project setup. See `docs/ARCHITECTURE.md` for the full tech stack and design decisions.
-
-## Getting started
-
-### Prerequisites
-
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) or Docker + Docker Compose
-- [VS Code](https://code.visualstudio.com/) with the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
-- A Claude Max or Pro subscription (for Claude Code)
-- A GitHub account with `gh` CLI configured
-
-### Setup
-
-```bash
-# 1. Clone the repo
-git clone https://github.com/{org}/{repo}.git
-cd {repo}
-
-# 2. Copy environment variables (created during project setup)
-cp .env.example .env
-# Edit .env with your values
-
-# 3. Open in VS Code and reopen in container
-code .
-# VS Code will prompt: "Reopen in Container" — click it
-# Or: Cmd+Shift+P → "Dev Containers: Reopen in Container"
-
-# 4. Verify setup (runs automatically, but you can check)
-bash .devcontainer/setup.sh
-```
-
-### First time only
-
-```bash
-# Authenticate GitHub CLI
-gh auth login
-
-# Claude Code will prompt for auth on first use
-claude
-```
-
-## Project structure
-
-```
-.
-├── .devcontainer/           # Dev environment (Docker + Claude Code + GitHub CLI)
-│   ├── Dockerfile
-│   ├── docker-compose.yml
-│   └── setup.sh
-├── .github/                 # Issue templates, PR template, workflows
-│   ├── ISSUE_TEMPLATE/
-│   ├── workflows/
-│   └── PULL_REQUEST_TEMPLATE.md
-├── docs/
-│   ├── VISION.md            # Project compass — problem, philosophy, litmus test
-│   ├── IDENTITY.md          # Build persona — the AI's technical voice
-│   ├── EXPERTS.md           # Expert advisory panel for decisions
-│   ├── ARCHITECTURE.md      # System design, domain model, tech decisions
-│   ├── ROADMAP.md           # What's built, what's next, what's not happening
-│   ├── BRANDING.md          # Visual identity, voice, design tokens
-│   ├── WORKFLOW.md          # How work is organized — build cycle, playbooks
-│   ├── adr/                 # Architecture Decision Records
-│   ├── specs/               # Feature implementation blueprints
-│   ├── branding/            # Logo, icons, OG images
-│   ├── guides/              # Operational guides (releasing, etc.)
-│   └── screenshots/         # App screenshots
-├── src/                     # Application code
-├── tests/                   # Test suite
-├── CLAUDE.md                # Agent context — loaded every session
-├── AGENTS.md                # Agent roles and startup behavior
-├── CHANGELOG.md             # Version history (Keep a Changelog)
-└── .notdefined.yml          # Metadata for rodacato.github.io showroom
-```
-
-## Documentation
-
-| Document | What it answers |
-|----------|----------------|
-| [VISION.md](docs/VISION.md) | Why does this exist? What problem does it solve? |
-| [IDENTITY.md](docs/IDENTITY.md) | Who is the technical voice behind this project? |
-| [EXPERTS.md](docs/EXPERTS.md) | Who do we consult for cross-cutting decisions? |
-| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | How is the system built? What patterns? What stack? |
-| [ROADMAP.md](docs/ROADMAP.md) | What's done? What's next? What are we NOT building? |
-| [BRANDING.md](docs/BRANDING.md) | How does it look and sound? |
-| [WORKFLOW.md](docs/WORKFLOW.md) | How does work flow from idea to shipped feature? |
-| [CHANGELOG.md](CHANGELOG.md) | What shipped in each version? |
-
-## Development
-
-### Working with issues and sprints
-
-This project uses GitHub Issues as the task system and GitHub Milestones as sprints.
-See [WORKFLOW.md](docs/WORKFLOW.md) for the full process.
-
-```bash
-# See current sprint
-gh issue list --milestone "Sprint 1" --state open
-
-# See all open issues
-gh issue list --state open
-```
-
-### Agents
-
-This project uses AI agents for development. See [AGENTS.md](AGENTS.md) for details.
-
-- **Team Lead** — Claude Code, runs locally in the devcontainer
-
-## Releases
-
-This project follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Semantic Versioning](https://semver.org/).
-
-See [releasing guide](docs/guides/releasing.md) for the release process.
-
-## License
-
-See [LICENSE](LICENSE).
+Everything outside `.launchpad/` is yours. Nothing breaks.
