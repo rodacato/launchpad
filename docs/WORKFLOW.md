@@ -180,12 +180,7 @@ gh issue list --milestone "Sprint N" --state open --limit 20
 
 # 3. Pick an issue and self-assign
 gh issue edit {N} --add-assignee @me --add-label "agent:active"
-
-# 3b. Move issue to "In Progress" on the project board
-#     Get the project number from CLAUDE.md → GitHub Project Number
-gh project item-add {PROJECT_NUMBER} --owner {org} --url https://github.com/{owner}/{repo}/issues/{N}
-gh project item-edit --project-id {PROJECT_NUMBER} --id {ITEM_ID} --field-id {STATUS_FIELD_ID} --single-select-option-id {IN_PROGRESS_ID}
-# Tip: use `gh project field-list {PROJECT_NUMBER} --owner {org}` to find field/option IDs
+# Board status is handled by GitHub Projects built-in automations (see below)
 
 # 4. Create a branch
 git checkout -b issue-{N}-{short-description}
@@ -203,9 +198,8 @@ gh pr create --title "feat: description (#N)" --body "closes #{N}" --draft
 
 # 9. When ready for review
 gh pr ready
-gh issue edit {N} --remove-label "agent:active" --add-label "agent:review"
-# Move to "Done" on the project board
-gh project item-edit --project-id {PROJECT_NUMBER} --id {ITEM_ID} --field-id {STATUS_FIELD_ID} --single-select-option-id {DONE_ID}
+# Labels (agent:active → agent:review) are synced automatically by pr-labels.yml
+# Board status (→ Done) is handled by GitHub Projects built-in automations
 
 # 10. Address PR review feedback (triggered by human)
 #     Read all review comments and threads on the PR
@@ -225,6 +219,31 @@ gh api graphql -f query='
   }' -f threadId="{THREAD_NODE_ID}"
 #     Get thread IDs from: gh api repos/{owner}/{repo}/pulls/{PR_NUMBER}/reviews
 ```
+
+---
+
+## Automations
+
+These run automatically — no agent action needed.
+
+### GitHub Actions workflows
+
+| Workflow | Trigger | Action |
+|----------|---------|--------|
+| `enforce-issue-link.yml` | PR opened/edited | Fails if PR body is missing `closes #N`. Comments with instructions. |
+| `pr-labels.yml` | PR opened/ready | Adds `agent:review` to linked issue, removes `agent:active`. On merge: cleans both labels. |
+
+### GitHub Projects built-in automations
+
+Configure these in the project board UI (Project → Menu → Workflows):
+
+| Automation | Trigger | Action |
+|------------|---------|--------|
+| Auto-add to project | New issue in repo | Added to board with status "Todo" |
+| Item closed | Issue closed | Status → "Done" |
+| Pull request merged | PR merged | Status → "Done" |
+
+These are zero-config — no PATs, no API keys, no CI minutes.
 
 ---
 

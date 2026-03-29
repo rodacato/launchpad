@@ -210,7 +210,16 @@
       This is where sprints, issues, and tasks are visualized.
       **After creating**: update `CLAUDE.md` → `GitHub Project Number` with the project number
       (visible in `gh project list --owner {org}` or in the project URL).
-      The agent uses this to move issues between board statuses automatically.
+- [ ] Enable project board automations:
+      Tell the human to configure built-in workflows in the project board UI:
+      ```
+      Human: open the project board → click menu (⋯) → Workflows
+      Enable these automations:
+      1. "Auto-add to project" → select this repo → save
+      2. "Item closed" → set status to "Done" → save
+      3. "Pull request merged" → set status to "Done" → save
+      ```
+      These handle board status automatically — no PATs or secrets needed.
 - [ ] Create labels that `docs/WORKFLOW.md` references (use `--force` to update if they already exist):
       ```
       gh label create "feature" --color "0E8A16" --description "New functionality" --force
@@ -240,7 +249,9 @@
       to add build steps.
       If no, remove `.github/workflows/pages.yml` and `docs/public/`.
 - [ ] Verify workflows are present:
-      check `.github/workflows/pages.yml` exists (if GitHub Pages was enabled)
+      - `.github/workflows/enforce-issue-link.yml` — enforces `closes #N` in PR bodies
+      - `.github/workflows/pr-labels.yml` — syncs agent labels on PR open/merge
+      - `.github/workflows/pages.yml` — only if GitHub Pages was enabled
 - [ ] Report to human: "GitHub setup complete. Moving to finalization."
 
 ---
