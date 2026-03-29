@@ -34,10 +34,11 @@ ELSE (established project):
   1. Read CLAUDE.md for project context
   2. Read .launchpad/WORKFLOW.md for base process, then docs/WORKFLOW.md for project specifics
   3. Read AGENTS.md for project-specific overrides and extra roles
-  4. Check for template updates (if .launchpad/sync.sh exists):
-     Run: .launchpad/sync.sh
-     IF updates available -> tell the human: "Template updates available.
-       Run '.launchpad/sync.sh --apply' to review and apply them."
+  4. Check for template updates:
+     Read .launchpad/manifest.yml for local version.
+     Fetch remote version: gh api repos/{source}/contents/.launchpad/manifest.yml?ref={branch}
+     IF remote version is newer -> tell the human: "Launchpad update available (vX → vY).
+       Run: curl -sL https://raw.githubusercontent.com/{source}/master/scripts/sync.sh | bash"
      Continue regardless — this is informational, not blocking.
   5. Check current sprint health:
      Run: gh api repos/{owner}/{repo}/milestones --jq '.[] | select(.state=="open")'

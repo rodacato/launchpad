@@ -20,8 +20,7 @@
 ├── .launchpad/        # Template-managed files (synced from launchpad)
 │   ├── AGENTS.md          # Base agent roles and behavior
 │   ├── WORKFLOW.md        # Base process (sprints, PRs, automations)
-│   ├── manifest.yml       # Template version and managed file list
-│   └── sync.sh            # Template sync script
+│   └── manifest.yml       # Template version and source
 ├── src/               # Application code
 ├── tests/             # Test suite
 ├── docs/

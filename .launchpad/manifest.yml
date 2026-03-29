@@ -1,48 +1,7 @@
 # Launchpad Template Manifest
-# Files listed here are template-managed and can be synced from the launchpad repo.
-# Project-owned files (docs/VISION.md, docs/ARCHITECTURE.md, etc.) are NEVER synced.
+# Only tracks version. Sync is handled by a remote script.
+# To leave launchpad: delete this entire .launchpad/ directory.
 
-# Template version — bump on every release to launchpad
-version: "0.3.0"
-
-# Source repository for updates
+version: "0.4.0"
 source: rodacato/launchpad
 branch: master
-
-# Template-managed files — these get updated from launchpad
-managed:
-  # Base process and agent roles (project overrides are in AGENTS.md and docs/WORKFLOW.md)
-  - .launchpad/AGENTS.md
-  - .launchpad/WORKFLOW.md
-
-  # GitHub workflows
-  - .github/workflows/enforce-issue-link.yml
-  - .github/workflows/pr-labels.yml
-  - .github/workflows/pages.yml
-
-  # GitHub templates
-  - .github/ISSUE_TEMPLATE/bug.md
-  - .github/ISSUE_TEMPLATE/feature.md
-  - .github/ISSUE_TEMPLATE/research.md
-  - .github/PULL_REQUEST_TEMPLATE.md
-
-  # Sync tooling (self-update)
-  - .launchpad/manifest.yml
-  - .launchpad/sync.sh
-
-# Project-owned files — NEVER synced (listed for documentation only)
-# - CLAUDE.md
-# - AGENTS.md                    (project overrides)
-# - docs/WORKFLOW.md              (project customizations)
-# - docs/VISION.md
-# - docs/IDENTITY.md
-# - docs/EXPERTS.md
-# - docs/ARCHITECTURE.md
-# - docs/ROADMAP.md
-# - docs/BRANDING.md
-# - .devcontainer/Dockerfile
-# - .devcontainer/devcontainer.json
-# - .devcontainer/docker-compose.yml
-# - .devcontainer/setup.sh
-# - README.md
-# - .notdefined.yml

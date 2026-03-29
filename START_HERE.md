@@ -311,6 +311,7 @@
       - Remove `START_HERE.md` from the `CLAUDE.md` repo structure tree.
       - Remove the `IF START_HERE.md exists` block from `.launchpad/AGENTS.md` startup behavior.
         Keep only the `ELSE` branch as the default (remove the `ELSE (established project):` label too — just start with the numbered steps directly).
+      - Delete `scripts/` directory: `rm -rf scripts/` (template tooling, not needed in projects)
       - Delete `START_HERE.md`: `git rm START_HERE.md`
       - Commit cleanup: `git add -A && git commit -m "chore: remove initialization scaffolding"`
 - [ ] Push to main: `git push origin main`
