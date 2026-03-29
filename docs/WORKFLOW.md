@@ -177,6 +177,12 @@ gh issue list --milestone "Sprint N" --state open --limit 20
 # 3. Pick an issue and self-assign
 gh issue edit {N} --add-assignee @me --add-label "agent:active"
 
+# 3b. Move issue to "In Progress" on the project board
+#     Get the project number from CLAUDE.md → GitHub Project Number
+gh project item-add {PROJECT_NUMBER} --owner {org} --url https://github.com/{owner}/{repo}/issues/{N}
+gh project item-edit --project-id {PROJECT_NUMBER} --id {ITEM_ID} --field-id {STATUS_FIELD_ID} --single-select-option-id {IN_PROGRESS_ID}
+# Tip: use `gh project field-list {PROJECT_NUMBER} --owner {org}` to find field/option IDs
+
 # 4. Create a branch
 git checkout -b issue-{N}-{short-description}
 
@@ -194,6 +200,8 @@ gh pr create --title "feat: description (#N)" --body "closes #{N}" --draft
 # 9. When ready for review
 gh pr ready
 gh issue edit {N} --remove-label "agent:active" --add-label "agent:review"
+# Move to "Done" on the project board
+gh project item-edit --project-id {PROJECT_NUMBER} --id {ITEM_ID} --field-id {STATUS_FIELD_ID} --single-select-option-id {DONE_ID}
 ```
 
 ---

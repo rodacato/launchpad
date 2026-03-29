@@ -9,6 +9,7 @@
 **Purpose**: <!-- one sentence -->
 **Stack**: <!-- e.g. Ruby 3.3 / Roda / Postgres 16 -->
 **Stage**: <!-- prototype | active | maintenance -->
+**GitHub Project Number**: <!-- set during Phase 3b, used for board status updates -->
 
 ## Repository structure
 

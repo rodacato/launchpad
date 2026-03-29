@@ -208,6 +208,9 @@
       To get the IDs: `gh project list --owner {org} --format json` and `gh repo view --json id`.
       Alternatively, the human can link it manually from the repo's Projects tab.
       This is where sprints, issues, and tasks are visualized.
+      **After creating**: update `CLAUDE.md` → `GitHub Project Number` with the project number
+      (visible in `gh project list --owner {org}` or in the project URL).
+      The agent uses this to move issues between board statuses automatically.
 - [ ] Create labels that `docs/WORKFLOW.md` references (use `--force` to update if they already exist):
       ```
       gh label create "feature" --color "0E8A16" --description "New functionality" --force
