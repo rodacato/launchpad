@@ -11,6 +11,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.6.0] - 2026-03-29
+
+### Added
+
+- Claude Code plugin structure (`.claude-plugin/plugin.json`, `marketplace.json`)
+- 16 atomic skills under `skills/` — each with `SKILL.md`, `template.md`, `VERSION`
+- Invocation via `/launchpad:vision`, `/launchpad:experts`, `/launchpad:github`, etc.
+- Install: `claude plugin install launchpad@launchpad-marketplace`
+
+### Changed
+
+- `modules/` renamed to `skills/` — `prompt.md` → `SKILL.md` with YAML frontmatter
+- `README.md` rewritten for plugin usage
+
+### Removed
+
+- `modules/`, `scripts/run.sh`, `scripts/check.sh`, `commands/` — replaced by plugin skills
+
+---
+
 ## [0.5.0] - 2026-03-29
 
 ### Added
@@ -60,6 +80,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -->
 
-[Unreleased]: https://github.com/rodacato/launchpad/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/rodacato/launchpad/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/rodacato/launchpad/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/rodacato/launchpad/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/rodacato/launchpad/releases/tag/v0.4.0

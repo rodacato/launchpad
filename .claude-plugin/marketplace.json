@@ -8,7 +8,7 @@
     {
       "name": "launchpad",
       "description": "Modular project setup — atomic skills for creating and updating project docs, configs, and workflows",
-      "version": "0.5.0",
+      "version": "0.6.0",
       "source": "./",
       "author": {
         "name": "rodacato"
