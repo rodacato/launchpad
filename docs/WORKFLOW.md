@@ -228,9 +228,57 @@ gh api graphql -f query='
 
 ---
 
-## Human Workflow
+## Sprint Planning
 
-### Sprint planning
+When the agent detects all issues in the current milestone are closed (see startup behavior
+in AGENTS.md), it triggers sprint planning. This is a CONVERSATION — the agent proposes,
+the human decides.
+
+### Flow
+
+```
+1. Agent closes the completed milestone:
+   gh api repos/{owner}/{repo}/milestones/{MILESTONE_NUMBER} --method PATCH -f state=closed
+
+2. Agent reads docs/ROADMAP.md → "What's Next" section
+   Shows the human what items are available and their sizes (S/M/L)
+
+3. Human picks which items go into the next sprint
+   → Human can also add items not in the roadmap
+   → Human can adjust priorities
+
+4. Agent creates the new milestone:
+   gh api repos/{owner}/{repo}/milestones \
+     -f title="Sprint N — short description" \
+     -f due_on="YYYY-MM-DDT00:00:00Z"
+
+5. Agent creates issues for each selected item:
+   gh issue create --title "..." --body "..." --label "feature" \
+     --milestone "Sprint N — short description"
+
+6. Agent adds each issue to the project board:
+   gh project item-add {PROJECT_NUMBER} --owner {org} \
+     --url https://github.com/{owner}/{repo}/issues/{N}
+
+7. Agent updates ROADMAP.md — moves planned items from "What's Next"
+   to the sprint history table
+
+8. Agent reports: "Sprint N created with X issues. Ready to start."
+```
+
+### Who decides what
+
+| Decision | Who |
+|----------|-----|
+| Which items enter the sprint | Human |
+| Sprint duration / due date | Human |
+| Issue creation and assignment | Agent (after human confirms) |
+| Milestone close | Agent (after detection) |
+| Roadmap updates | Agent (mechanical, based on what was planned) |
+
+### Manual sprint planning
+
+If you prefer to plan without the agent:
 
 ```bash
 # See all open issues
@@ -242,6 +290,10 @@ gh issue create --template feature.md
 # Assign to sprint
 gh issue edit {N} --milestone "Sprint N"
 ```
+
+---
+
+## Human Workflow
 
 ### Reviewing a PR
 
