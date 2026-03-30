@@ -17,22 +17,25 @@ claude plugin install launchpad@launchpad-marketplace
 From any project:
 
 ```text
-/launchpad:vision        # Create or update VISION.md
-/launchpad:identity      # Create or update IDENTITY.md
-/launchpad:experts       # Create or update EXPERTS.md
-/launchpad:architecture  # Create or update ARCHITECTURE.md
-/launchpad:roadmap       # Create or update ROADMAP.md
-/launchpad:workflow      # Create or update WORKFLOW.md
-/launchpad:agents        # Create or update AGENTS.md
-/launchpad:branding      # Create or update BRANDING.md
-/launchpad:notdefined    # Create or update .notdefined.yml
-/launchpad:github        # Configure GitHub labels, workflows, board
-/launchpad:devcontainer  # Create or update .devcontainer/
-/launchpad:kamal         # Create or update config/deploy.yml
-/launchpad:caddy         # Create or update Caddyfile
-/launchpad:releasing     # Create or update docs/guides/releasing.md
-/launchpad:contributing  # Create or update CONTRIBUTING.md
-/launchpad:changelog     # Create or update CHANGELOG.md
+/launchpad:docs vision
+/launchpad:docs identity
+/launchpad:docs experts
+/launchpad:docs architecture
+/launchpad:docs branding
+/launchpad:docs roadmap
+/launchpad:docs workflow
+/launchpad:docs agents
+/launchpad:docs notdefined
+
+/launchpad:ci github
+
+/launchpad:infra devcontainer
+/launchpad:infra kamal
+/launchpad:infra caddy
+
+/launchpad:process releasing
+/launchpad:process contributing
+/launchpad:process changelog
 ```
 
 Each skill handles both create (from scratch) and update (preserve + extend) cases.
@@ -40,6 +43,11 @@ Each skill handles both create (from scratch) and update (preserve + extend) cas
 ## Structure
 
 ```text
+commands/
+  docs.md        ← /launchpad:docs <skill>
+  ci.md          ← /launchpad:ci <skill>
+  infra.md       ← /launchpad:infra <skill>
+  process.md     ← /launchpad:process <skill>
 skills/
   {name}/
     SKILL.md      ← agent instructions (create + update)
