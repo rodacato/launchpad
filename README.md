@@ -69,3 +69,12 @@ modules:
   experts: "1.1"
   github: "1.0"
 ```
+
+## Development
+
+Working on launchpad itself? See [docs/guides/development.md](docs/guides/development.md)
+for the local dev loop — how to install from a local path, refresh after changes,
+and test in other projects without publishing.
+
+Writing a new skill? See [docs/guides/skill-authoring.md](docs/guides/skill-authoring.md)
+for the SKILL.md template and authoring process.
