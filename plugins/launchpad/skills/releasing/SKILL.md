@@ -1,8 +1,8 @@
 ---
 name: releasing
-description: Create or update docs/guides/releasing.md — release process, versioning, CHANGELOG workflow. Use when setting up the release process for a new project. Use when releases are inconsistent or undocumented. Use when the team needs a hotfix process. Use before cutting the first tagged release.
+description: Produces the release process DOC at docs/guides/releasing.md — the playbook for cutting releases (version rules, CHANGELOG workflow, hotfix process). This skill writes a reference document; it does NOT execute a release. Use when setting up the release process for a new project. Use when releases are inconsistent or undocumented. Use when the team needs a hotfix process. Use before cutting the first tagged release. NOT for "do the release now" — that's a future lifecycle:ship skill.
 metadata:
-  version: "1.1"
+  version: "1.2"
 ---
 
 # Releasing
@@ -119,11 +119,11 @@ has a file to write into."
 - [ ] Hotfix process exists and explains branch-from-tag strategy
 - [ ] Registry publish step (if applicable) includes auth / credential guidance
 - [ ] Agent prompts section is present and copy-pasteable
-- [ ] `.launchpad/manifest.yml` updated with `releasing: "1.1"` under `modules:`
+- [ ] `.launchpad/manifest.yml` updated with `releasing: "1.2"` under `modules:`
 
 ## When done
 
-Update `.launchpad/manifest.yml` — set `releasing: "1.1"` under `modules:`.
+Update `.launchpad/manifest.yml` — set `releasing: "1.2"` under `modules:`.
 
 Next likely skills:
 - `changelog` — if not already set up, define the CHANGELOG this process writes into
