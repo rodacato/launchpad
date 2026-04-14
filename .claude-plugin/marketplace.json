@@ -26,8 +26,8 @@
     {
       "name": "philosophy",
       "source": "./plugins/philosophy",
-      "description": "Reference material — experts panel, identity, principles",
-      "version": "0.1.0",
+      "description": "Reference material — experts panel, identity, voice, principles",
+      "version": "0.2.0",
       "author": {
         "name": "rodacato"
       }

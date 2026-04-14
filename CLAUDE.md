@@ -8,7 +8,7 @@
 **Name**: kwik-e-marketplace (repo: `kwik-e-dev`, currently still `launchpad` locally)
 **Purpose**: rodacato's personal Claude Code plugin marketplace. Three plugins:
 `launchpad` (project bootstrap), `lifecycle` (daily work skills), `philosophy`
-(reference material — experts panel, identity).
+(reference material — experts panel, identity, voice, core principles).
 **Stack**: Markdown + YAML, Claude Code plugin format
 **Stage**: active, pre-1.0
 
@@ -27,10 +27,11 @@
 │   │   ├── .claude-plugin/plugin.json
 │   │   ├── commands/             # /lifecycle:review
 │   │   └── skills/               # code-review (more coming)
-│   └── philosophy/               # Reference plugin (v0.1.0)
+│   └── philosophy/               # Reference plugin (v0.2.0)
 │       ├── .claude-plugin/plugin.json
-│       ├── commands/             # /philosophy:panel, /philosophy:identity
-│       └── skills/               # experts, identity
+│       ├── commands/             # /philosophy:panel, /philosophy:identity, /philosophy:voice
+│       ├── shared/               # core-principles.md — inherited by every Identity
+│       └── skills/               # experts, identity, voice
 ├── docs/
 │   ├── EXPERTS.md                # Reference panel consulted by skills
 │   ├── IDENTITY.md
@@ -96,3 +97,14 @@ Plugin dev setup is documented in `docs/guides/development.md`.
 - **CHANGELOG** entries are per-plugin under `## launchpad@X.Y.Z`,
   `## lifecycle@X.Y.Z`, `## philosophy@X.Y.Z` sections since plugins version
   independently.
+- **Shared inheritable content** lives at `plugins/<plugin>/shared/`. Currently
+  only `philosophy/shared/core-principles.md` exists — it is copied verbatim
+  into every generated `docs/IDENTITY.md` with a `<!-- inherited from
+  philosophy/core-principles vX.Y -->` marker. Bump its version (inside the
+  file's header comment) whenever principles change; the `identity` skill
+  refreshes downstream copies on next run.
+- **Persona layering**: Core Principles (shared, inherited) < Identity
+  (project, `docs/IDENTITY.md`) < Voice (user-global,
+  `~/.claude/output-styles/<name>.md`). Core Principles = the floor. Identity
+  = what the agent thinks on this project. Voice = how the agent sounds
+  across all projects.

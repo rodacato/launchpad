@@ -9,6 +9,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### philosophy@0.2.0 — Voice skill + inheritable core principles
+
+**Added:**
+
+- `voice` skill — creates or updates a user-level Claude Code output style at
+  `~/.claude/output-styles/<name>.md`. Invoked via `/philosophy:voice
+  [style-name]`. Voice = how the agent sounds (global, per-user); Identity =
+  what the agent thinks (per-project)
+- `plugins/philosophy/shared/core-principles.md` v1.0 — the inheritable base
+  block injected into every Build Identity. Universal rules (verify before
+  asserting, stop-and-wait on questions, evidence over authority, scope
+  discipline, …) that every project's IDENTITY.md now carries verbatim with a
+  `<!-- inherited from philosophy/core-principles v1.0 -->` version marker
+
+**Changed:**
+
+- `identity` skill bumped to `1.3` — template now includes a
+  `## Core Principles (inherited)` block at the top; Step 3 of the Create
+  flow injects the current shared source verbatim; Update flow refreshes
+  the block when the version marker drifts from the shared source. Manifest
+  key also bumps to `"1.3"`
+
+**Why:** Every Build Identity re-derived the same floor principles in slightly
+different wording, producing drift and leaving gaps. The shared source + inline
+copy pattern keeps IDENTITY.md self-contained (agent can read it without the
+marketplace present) while letting a single update propagate via re-injection.
+The new Voice skill separates tone (user-global) from judgment (project-local),
+so the same human's agent sounds consistent across projects without forcing
+every project to share technical opinions.
+
+---
+
 ### launchpad@0.7.0 — Multi-plugin marketplace (BREAKING)
 
 **Breaking changes:**
