@@ -3,16 +3,6 @@ name: kamal
 description: Create or update config/deploy.yml — Kamal deployment configuration for container-based deploys to your own servers. Use when deploying a Dockerized app to a VPS without a PaaS. Use when migrating off Heroku/Render onto owned infrastructure. Use when adding a new server, registry, or accessory (Postgres, Redis) to an existing Kamal setup. Use when setting up zero-downtime rolling deploys.
 metadata:
   version: "1.1"
-  author: rodacato
-  category: bootstrap
-  triggers:
-    - kamal
-    - "deploy.yml"
-    - "kamal deploy"
-    - deployment
-    - "zero downtime deploy"
-    - "docker deploy vps"
-    - ".kamal/secrets"
 ---
 
 # Kamal

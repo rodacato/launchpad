@@ -3,16 +3,6 @@ name: voice
 description: Create or update a Claude Code output style at ~/.claude/output-styles/<name>.md — the user-level voice (tone, language, idioms) the agent uses in every session. Use when the agent's tone feels generic or inconsistent across projects. Use when you want a personal speaking style applied globally regardless of project. Use to complement a project Identity — Identity is what the agent thinks, Voice is how it sounds.
 metadata:
   version: "0.1"
-  author: rodacato
-  category: philosophy
-  triggers:
-    - voice
-    - "output style"
-    - "output-style"
-    - "agent tone"
-    - "agent voice"
-    - "personal style"
-    - "global persona"
 ---
 
 # Voice

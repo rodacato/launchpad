@@ -3,18 +3,6 @@ name: github
 description: Configure GitHub — labels, workflows, issue templates, PR template, project board, merge strategy, branch protection. Use when setting up a brand-new repo to match the rodacato process. Use when an existing repo is missing standard labels or templates. Use when enforcing "PRs must reference an issue" across the team. Use when hardening `main` with branch protection after the first push.
 metadata:
   version: "1.1"
-  author: rodacato
-  category: bootstrap
-  triggers:
-    - github
-    - "GitHub setup"
-    - labels
-    - "issue templates"
-    - "PR template"
-    - "project board"
-    - "branch protection"
-    - "gh workflows"
-    - ".github directory"
 ---
 
 # GitHub

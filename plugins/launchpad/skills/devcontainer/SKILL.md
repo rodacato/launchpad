@@ -3,16 +3,6 @@ name: devcontainer
 description: Create or update .devcontainer/ — dev environment with Claude Code, GitHub CLI, and language toolchain. Use when starting a new project that needs a reproducible dev setup. Use when onboarding contributors and "works on my machine" is the main blocker. Use when the project adds a new service (Postgres, Redis) that every dev needs locally. Use when the existing devcontainer drifted from current toolchain versions.
 metadata:
   version: "1.1"
-  author: rodacato
-  category: bootstrap
-  triggers:
-    - devcontainer
-    - ".devcontainer"
-    - "dev environment"
-    - "dev container"
-    - "VS Code container"
-    - "reproducible dev setup"
-    - "docker-compose dev"
 ---
 
 # Devcontainer

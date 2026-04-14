@@ -3,15 +3,6 @@ name: experts
 description: Create or update docs/EXPERTS.md — the Expert Advisory Panel of AI personas the Build Identity consults. Use when the project needs domain perspectives beyond the Identity's scope. Use when onboarding a project that lacks specialist guidance. Use when decisions keep stalling for lack of clear domain authority. Use after IDENTITY.md is written and the expertise gaps become visible.
 metadata:
   version: "1.2"
-  author: rodacato
-  category: philosophy
-  triggers:
-    - experts
-    - "expert panel"
-    - "EXPERTS.md"
-    - "advisory panel"
-    - "expert personas"
-    - "specialist advisors"
 ---
 
 # Experts

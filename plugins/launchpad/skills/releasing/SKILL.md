@@ -3,16 +3,6 @@ name: releasing
 description: Create or update docs/guides/releasing.md — release process, versioning, CHANGELOG workflow. Use when setting up the release process for a new project. Use when releases are inconsistent or undocumented. Use when the team needs a hotfix process. Use before cutting the first tagged release.
 metadata:
   version: "1.1"
-  author: rodacato
-  category: bootstrap
-  triggers:
-    - releasing
-    - "release process"
-    - "releasing.md"
-    - "how to release"
-    - "cut a release"
-    - "semver"
-    - "hotfix process"
 ---
 
 # Releasing

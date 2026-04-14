@@ -3,16 +3,6 @@ name: roadmap
 description: Create or update docs/ROADMAP.md — phases, what's built, what's next, what we're NOT doing, decision log. Use when starting a new project after vision is set. Use when the team disagrees on what to build next. Use when stakeholders keep asking "is X on the roadmap?". Use when scope is creeping and you need an explicit "not doing" list.
 metadata:
   version: "1.2"
-  author: rodacato
-  category: bootstrap
-  triggers:
-    - roadmap
-    - "ROADMAP.md"
-    - "project phases"
-    - "what's next"
-    - "not doing"
-    - "decision log"
-    - milestones
 ---
 
 # Roadmap

@@ -3,16 +3,6 @@ name: caddy
 description: Create or update Caddyfile — reverse proxy configuration with automatic HTTPS. Use when the project needs HTTPS without wrestling with cert renewal. Use when an app server sits behind a domain and needs a front door. Use when static assets and a dynamic app share the same hostname. Use when adding a second domain or subdomain to an existing Caddy setup.
 metadata:
   version: "1.1"
-  author: rodacato
-  category: bootstrap
-  triggers:
-    - caddy
-    - Caddyfile
-    - "reverse proxy"
-    - "https setup"
-    - "tls certificate"
-    - "let's encrypt"
-    - "static files serve"
 ---
 
 # Caddy

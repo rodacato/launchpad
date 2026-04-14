@@ -3,14 +3,6 @@ name: code-review
 description: Conducts a multi-axis code review on a GitHub PR using the gh CLI. Use when reviewing any PR before merge. Use when evaluating code written by another agent, another person, or yourself. Use when you need to analyze a PR and post structured review comments back to GitHub.
 metadata:
   version: "0.1"
-  author: rodacato
-  category: lifecycle
-  triggers:
-    - code review
-    - review PR
-    - revisar PR
-    - gh pr review
-    - pull request review
 ---
 
 # Code Review

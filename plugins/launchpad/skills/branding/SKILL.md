@@ -3,18 +3,6 @@ name: branding
 description: Create or update docs/BRANDING.md — name, tagline, voice, color palette, typography, logo concept, microcopy. Use when a project needs a brand identity beyond "it works". Use when the UI copy feels inconsistent or generic. Use when the project is about to go public and has no visual direction. Use when onboarding a designer who asks "what's the brand?".
 metadata:
   version: "1.1"
-  author: rodacato
-  category: bootstrap
-  triggers:
-    - branding
-    - "BRANDING.md"
-    - "brand identity"
-    - "color palette"
-    - tagline
-    - voice
-    - microcopy
-    - logo
-    - typography
 ---
 
 # Branding

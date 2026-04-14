@@ -3,15 +3,6 @@ name: changelog
 description: Create or update CHANGELOG.md — version history following Keep a Changelog format. Use when starting a project that will ship versioned releases. Use when cutting a new release and recording what changed. Use when CHANGELOG.md is missing, malformed, or has diverged from Keep a Changelog format. Use before running the releasing skill for the first time.
 metadata:
   version: "1.1"
-  author: rodacato
-  category: bootstrap
-  triggers:
-    - changelog
-    - "CHANGELOG.md"
-    - "version history"
-    - "keep a changelog"
-    - "release notes"
-    - "what's new"
 ---
 
 # Changelog

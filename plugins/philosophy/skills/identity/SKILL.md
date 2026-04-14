@@ -3,15 +3,6 @@ name: identity
 description: Create or update docs/IDENTITY.md — the Build Identity, the technical persona the agent embodies on this project. Use when starting a new project that needs a consistent decision-making voice. Use when the agent's judgment feels generic or inconsistent across sessions. Use when VISION.md is set and you need a persona that can defend it. Use before writing EXPERTS.md — the Identity's gaps shape the panel.
 metadata:
   version: "1.3"
-  author: rodacato
-  category: philosophy
-  triggers:
-    - identity
-    - "build identity"
-    - "IDENTITY.md"
-    - "technical persona"
-    - "fractional CTO"
-    - "staff engineer persona"
 ---
 
 # Identity

@@ -3,15 +3,6 @@ name: notdefined
 description: Create or update .notdefined.yml — project metadata consumed by the rodacato showroom (rodacato.github.io/projects). Use when publishing a new project to the showroom for the first time. Use when the showroom entry shows stale tagline, status, or stack. Use when branding assets (icon, screenshot, colors) are finalized and need to surface on the site. Use when the repo moves or its primary language changes.
 metadata:
   version: "1.1"
-  author: rodacato
-  category: bootstrap
-  triggers:
-    - notdefined
-    - ".notdefined.yml"
-    - showroom
-    - "project metadata"
-    - "rodacato projects"
-    - "showcase entry"
 ---
 
 # Notdefined

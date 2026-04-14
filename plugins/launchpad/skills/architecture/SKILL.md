@@ -3,18 +3,6 @@ name: architecture
 description: Create or update docs/ARCHITECTURE.md — system design, tech stack, domain model, directory layout, and key decisions with reasoning. Use when starting a new project with no technical design yet. Use when tech stack debates keep reopening. Use when a new contributor needs to understand the system without reading code. Use when architecture decisions are being made but not written down.
 metadata:
   version: "1.1"
-  author: rodacato
-  category: bootstrap
-  triggers:
-    - architecture
-    - "ARCHITECTURE.md"
-    - "tech stack"
-    - "system design"
-    - "domain model"
-    - "directory structure"
-    - "design decisions"
-    - DDD
-    - hexagonal
 ---
 
 # Architecture

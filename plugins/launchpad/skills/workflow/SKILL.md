@@ -3,17 +3,6 @@ name: workflow
 description: Create or update docs/WORKFLOW.md — the complete team workflow covering build cycle (Issue → Branch → PR → Merge), sprint model, test strategy, playbooks, and definition of done. Use when the team has no written process for how work flows. Use when PRs keep getting merged without tests or reviews. Use when recurring operations (deploys, migrations) are tribal knowledge. Use when the definition of done is "when the author says so".
 metadata:
   version: "1.1"
-  author: rodacato
-  category: bootstrap
-  triggers:
-    - workflow
-    - "WORKFLOW.md"
-    - "build cycle"
-    - "test strategy"
-    - "definition of done"
-    - playbook
-    - sprint
-    - "PR process"
 ---
 
 # Workflow

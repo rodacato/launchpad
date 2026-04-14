@@ -3,15 +3,6 @@ name: contributing
 description: Create or update CONTRIBUTING.md — dev setup, branch conventions, PR process, testing expectations. Use when starting a new open-source or internal project. Use when onboarding contributors and they keep asking the same setup questions. Use when CONTRIBUTING.md is missing or stale. Use when PR hygiene is inconsistent across the team.
 metadata:
   version: "1.1"
-  author: rodacato
-  category: bootstrap
-  triggers:
-    - contributing
-    - "CONTRIBUTING.md"
-    - "contribution guidelines"
-    - "how to contribute"
-    - "contributor setup"
-    - "onboarding contributors"
 ---
 
 # Contributing

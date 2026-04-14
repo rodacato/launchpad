@@ -3,14 +3,6 @@ name: vision
 description: Create or update docs/VISION.md — the project's compass (problem, philosophy, litmus test, what-this-is-NOT). Use when starting a new project. Use when the project direction feels unclear. Use when two features conflict and you need a tie-breaker. Use when onboarding someone and they ask "what IS this?"
 metadata:
   version: "1.2"
-  author: rodacato
-  category: bootstrap
-  triggers:
-    - vision
-    - "project vision"
-    - "VISION.md"
-    - "project compass"
-    - "what is this project"
 ---
 
 # Vision

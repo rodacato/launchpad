@@ -3,16 +3,6 @@ name: agents
 description: Create or update AGENTS.md — agent roles, startup behavior, triggers, and project-specific rules the agent must follow. Use when a project uses Claude Code or other agents and they lack a startup contract. Use when the agent keeps asking the same context questions every session. Use when there are modules the agent should never touch without approval. Use when recurring triggers ("when I say deploy, follow the playbook") need to be codified.
 metadata:
   version: "1.1"
-  author: rodacato
-  category: bootstrap
-  triggers:
-    - agents
-    - "AGENTS.md"
-    - "agent roles"
-    - "startup behavior"
-    - "agent rules"
-    - "agent triggers"
-    - "claude code"
 ---
 
 # Agents
