@@ -9,6 +9,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### philosophy@0.3.0 — orient meta-skill + operating-behaviors
+
+**Added:**
+
+- `orient` skill — meta-skill that routes a task across launchpad / lifecycle
+  / philosophy plugins and loads the inherited floor (`core-principles.md` +
+  `operating-behaviors.md`) before any other skill runs. Invoked via
+  `/philosophy:orient [task description]`. Inspired by addyosmani's
+  `using-agent-skills` discovery pattern.
+- `plugins/philosophy/shared/operating-behaviors.md` v1.0 — companion to
+  `core-principles.md`. Five trigger → reflex → why behaviors (surface
+  assumptions, manage confusion actively, push back when warranted,
+  enforce simplicity, verify before "done"). Inspired by addyosmani's
+  "Core Operating Behaviors" pattern.
+
+**Changed:**
+
+- `AGENTS.md` startup contract now points to `orient` as the session entry
+  point when the matching skill isn't obvious.
+- `launchpad/skills/releasing` bumped to 1.2 — description rewritten to
+  emphasize that this skill produces the release process DOC, not the
+  release itself. Avoids future confusion with the planned `lifecycle:ship`
+  skill (which will execute releases).
+
+**Why:** Every session before this had no canonical "which skill?" answer;
+Claude Code matched skill descriptions independently and the agent guessed
+when multiple plausibly fit. `orient` makes the routing explicit and
+loads the shared floor in the same step, so principles and behaviors apply
+regardless of which leaf skill runs next. The `releasing` description
+clarification is preventive — `ship` doesn't exist yet, but lock the naming
+distinction now so it doesn't bite when M3 lands.
+
+---
+
 ### philosophy@0.2.0 — Voice skill + inheritable core principles
 
 **Added:**

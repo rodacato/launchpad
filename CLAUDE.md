@@ -8,7 +8,8 @@
 **Name**: kwik-e-marketplace (repo: `kwik-e-dev`, currently still `launchpad` locally)
 **Purpose**: rodacato's personal Claude Code plugin marketplace. Three plugins:
 `launchpad` (project bootstrap), `lifecycle` (daily work skills), `philosophy`
-(reference material — experts panel, identity, voice, core principles).
+(reference material — experts panel, identity, voice, orient meta-skill,
+core principles + operating behaviors).
 **Stack**: Markdown + YAML, Claude Code plugin format
 **Stage**: active, pre-1.0
 
@@ -27,11 +28,11 @@
 │   │   ├── .claude-plugin/plugin.json
 │   │   ├── commands/             # /lifecycle:review
 │   │   └── skills/               # code-review (more coming)
-│   └── philosophy/               # Reference plugin (v0.2.0)
+│   └── philosophy/               # Reference plugin (v0.3.0)
 │       ├── .claude-plugin/plugin.json
-│       ├── commands/             # /philosophy:panel, /philosophy:identity, /philosophy:voice
-│       ├── shared/               # core-principles.md — inherited by every Identity
-│       └── skills/               # experts, identity, voice
+│       ├── commands/             # /philosophy:panel, /philosophy:identity, /philosophy:voice, /philosophy:orient
+│       ├── shared/               # core-principles.md, operating-behaviors.md
+│       └── skills/               # experts, identity, voice, orient (meta)
 ├── docs/
 │   ├── EXPERTS.md                # Reference panel consulted by skills
 │   ├── IDENTITY.md
@@ -108,3 +109,11 @@ Plugin dev setup is documented in `docs/guides/development.md`.
   `~/.claude/output-styles/<name>.md`). Core Principles = the floor. Identity
   = what the agent thinks on this project. Voice = how the agent sounds
   across all projects.
+- **Floor for every session**: `core-principles.md` (rules / values) +
+  `operating-behaviors.md` (situation-triggered reflexes). The `orient`
+  meta-skill loads both before any other skill runs. Update the shared
+  source to update everywhere; do NOT hand-edit copies in target projects.
+- **Skill discovery entry point**: `philosophy:orient`. Use it when the
+  matching skill isn't obvious — it walks a decision tree across all three
+  plugins and returns one routing decision plus the loaded floor. Skip it
+  for unambiguous tasks.

@@ -12,9 +12,15 @@
 ### Startup
 
 1. Read `CLAUDE.md` for project context
-2. Run `gh issue list --assignee @me --state open` to see active issues
-3. If none assigned, run `gh issue list --state open --limit 10` and ask which to work
-4. Never start work without an associated issue number (for feature work)
+2. **When in doubt about which skill applies to the task, load
+   `plugins/philosophy/skills/orient/SKILL.md` FIRST.** It routes the task
+   across launchpad / lifecycle / philosophy and loads the inherited floor
+   (`plugins/philosophy/shared/core-principles.md` + `operating-behaviors.md`).
+   For obvious tasks (e.g. "review PR 42" → `lifecycle:review`), skip orient
+   and go straight to the matching skill.
+3. Run `gh issue list --assignee @me --state open` to see active issues
+4. If none assigned, run `gh issue list --state open --limit 10` and ask which to work
+5. Never start work without an associated issue number (for feature work)
 
 ### Responsibilities
 

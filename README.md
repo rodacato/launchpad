@@ -15,7 +15,7 @@ and [Gentleman-Programming/gentle-ai](https://github.com/Gentleman-Programming/g
 |---|---|---|---|---|
 | **launchpad** | 0.7.0 | Project bootstrap — docs, infra, CI, process artifacts | 14 (vision, architecture, branding, roadmap, workflow, agents, notdefined, github, devcontainer, kamal, caddy, releasing, contributing, changelog) | `/launchpad:docs`, `/launchpad:ci`, `/launchpad:infra`, `/launchpad:process` |
 | **lifecycle** | 0.1.0 | Daily work skills — review, debug, ship | 1 (code-review; more coming) | `/lifecycle:review` |
-| **philosophy** | 0.2.0 | Reference — expert panel, identity, voice, core principles | 3 (experts, identity, voice) | `/philosophy:panel`, `/philosophy:identity`, `/philosophy:voice` |
+| **philosophy** | 0.3.0 | Reference — expert panel, identity, voice, orient meta-skill, core principles + operating behaviors | 4 (experts, identity, voice, orient) | `/philosophy:panel`, `/philosophy:identity`, `/philosophy:voice`, `/philosophy:orient` |
 
 Install the ones you want, skip the ones you don't.
 
@@ -71,11 +71,16 @@ More skills incoming — git-workflow, debugging, shipping.
 ### philosophy — reference material
 
 ```text
+/philosophy:orient [task description]
 /philosophy:panel <question or topic>
 /philosophy:identity
 /philosophy:voice [style-name]
 ```
 
+- `orient` is the meta-skill — load it FIRST when you don't know which skill
+  applies. It routes the task across launchpad / lifecycle / philosophy and
+  loads the inherited floor (`core-principles.md` + `operating-behaviors.md`)
+  before anything else runs.
 - `panel` consults a curated advisory panel (Architect, DevX, Prompting, etc.).
 - `identity` creates or updates `docs/IDENTITY.md` — the project's Build Identity,
   with an inherited `## Core Principles` block from `philosophy/shared/core-principles.md`.
@@ -102,8 +107,8 @@ kwik-e-dev/                           ← repo root
 │   └── philosophy/                   ← reference plugin
 │       ├── .claude-plugin/plugin.json
 │       ├── commands/
-│       ├── shared/{core-principles.md}  ← inherited by every Identity
-│       └── skills/{experts, identity, voice}
+│       ├── shared/{core-principles, operating-behaviors}  ← inherited floor
+│       └── skills/{experts, identity, voice, orient}      ← orient is the meta-skill
 ├── docs/
 │   ├── EXPERTS.md                   ← reference panel consulted by skills
 │   ├── IDENTITY.md                  ← how this team works
