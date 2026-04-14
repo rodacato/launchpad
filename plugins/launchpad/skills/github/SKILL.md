@@ -1,9 +1,10 @@
 ---
 name: github
-description: Configure GitHub — labels, workflows, issue templates, PR template, project board, branch protection
+description: Configure GitHub — labels, workflows, issue templates, PR template, project board, merge strategy, branch protection. Use when setting up a brand-new repo to match the rodacato process. Use when an existing repo is missing standard labels or templates. Use when enforcing "PRs must reference an issue" across the team. Use when hardening `main` with branch protection after the first push.
 metadata:
-  version: "1.0"
+  version: "1.1"
   author: rodacato
+  category: bootstrap
   triggers:
     - github
     - "GitHub setup"
@@ -12,12 +13,31 @@ metadata:
     - "PR template"
     - "project board"
     - "branch protection"
+    - "gh workflows"
+    - ".github directory"
 ---
 
 # GitHub
 
-Configure `.github/` and GitHub repo settings — workflows, issue templates, PR template,
-labels, project board, merge strategy, and branch protection.
+## Overview
+
+Configure `.github/` and the GitHub repo settings so the project uses
+the rodacato process out of the box — issue templates, PR template,
+labels, workflows that enforce issue linkage, an optional project board,
+squash-merge strategy, and branch protection on `main`.
+
+## When to Use
+
+- Brand-new repo needs the rodacato `.github/` scaffold applied
+- Existing repo is missing standard labels (`feature`, `bug`, `agent:active`, etc.)
+- Team wants the "every PR must reference an issue" workflow enforced automatically
+- Setting up a Project board with auto-add and "merged → Done" automations
+- Hardening `main` with branch protection after the first push
+
+**When NOT to use:**
+- Personal throwaway repo that will never see contributors
+- Organization-managed templates already handle all of this — don't double-configure
+- Private fork where the upstream `.github/` should not be touched
 
 ## Before you start
 
@@ -27,9 +47,10 @@ gh auth status
 gh repo view --json name,owner
 ```
 
----
+Required tools: `gh` CLI authenticated, push access to the repo, and
+(for project/ruleset calls) appropriate org permissions.
 
-## Steps
+## Process
 
 ### Step 1 — Copy GitHub files
 
@@ -129,8 +150,41 @@ gh api --method POST repos/{owner}/{repo}/rulesets \
 EOF
 ```
 
----
+## Common Rationalizations
+
+| Rationalization | Reality |
+|---|---|
+| "Labels are cosmetic, we can add them later" | Later means never. Without labels the `enforce-issue-link` and `pr-labels` workflows have nothing to match on, and triage becomes a manual read of every title. |
+| "We don't need issue templates, contributors can figure it out" | Contributors default to one-line issues with no repro. Templates cost five minutes to install and save hours of back-and-forth. |
+| "Branch protection blocks me when I need to hotfix" | The ruleset here requires 0 approvals — it only prevents force-push and requires a PR. If that blocks a hotfix, the hotfix is doing something wrong. |
+| "Merge commits preserve more history" | They also preserve every WIP commit a contributor pushed. Squash-on-merge gives clean history AND the PR still has the full commit trail. |
+| "I'll skip `delete_branch_on_merge`, branches are cheap" | Cheap to create, expensive to read. Stale branches obscure what's live; deletion is reversible via `gh api`. |
+
+## Red Flags
+
+- `.github/workflows/enforce-issue-link.yml` present but `feature`/`bug` labels don't exist — workflow runs and fails on every PR
+- Issue templates committed but `config.yml` missing — GitHub shows the raw chooser with no guidance
+- Branch protection applied BEFORE the first push to `main` — the rule references a branch that doesn't exist yet, confusing later runs
+- `gh label create` run without `--force` on an existing label — silent failure, label unchanged
+- Project board created under the wrong owner (personal vs org) — auto-add workflow never fires
+- PR template committed with the rodacato default sections stripped out — nothing enforces the "closes #N" convention
+
+## Verification
+
+- [ ] `.github/workflows/enforce-issue-link.yml` and `pr-labels.yml` exist
+- [ ] `.github/ISSUE_TEMPLATE/` contains `feature.md`, `bug.md`, `research.md`, `chore.md`, `config.yml`
+- [ ] `.github/PULL_REQUEST_TEMPLATE.md` exists and references `closes #N`
+- [ ] `gh label list` shows all seven rodacato labels with the documented colors
+- [ ] If a Project board was requested: `gh project list --owner <org-or-user>` shows it, and `CLAUDE.md` has the project number filled in
+- [ ] If merge strategy was requested: `gh repo view --json allowSquashMerge,allowMergeCommit,allowRebaseMerge` confirms squash-only
+- [ ] If branch protection was requested: `gh api repos/{owner}/{repo}/rulesets` lists the "Protect main" ruleset as `active`
+- [ ] `.launchpad/manifest.yml` updated with `github: "1.1"` under `modules:`
 
 ## When done
 
-Update `.launchpad/manifest.yml` — set `github: "1.0"` under `modules:`.
+Update `.launchpad/manifest.yml` — set `github: "1.1"` under `modules:`.
+
+Next likely skills:
+- `kamal` — add a deploy workflow that triggers from tags or `main`
+- `vision` / `roadmap` — seed the first issues on the new board
+- `devcontainer` — so agent contributors boot into the same environment the workflows assume
