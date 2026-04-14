@@ -9,6 +9,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### lifecycle@0.2.0 — Lifecycle breadth (git-workflow, debugging, simplify, ship)
+
+**Added:**
+
+- `git-workflow` skill — executes the project's git hygiene (branch from
+  issue → commit with conventional format → open PR with `closes #N`).
+  Reads `CLAUDE.md` / `AGENTS.md` / `CONTRIBUTING.md` first to honor
+  per-project overrides. Refuses destructive operations without explicit
+  confirmation. Invoked via `/lifecycle:git-workflow`.
+- `debugging` skill — systematic process: reproduce, isolate, hypothesize,
+  test the hypothesis BEFORE changing code, fix with the minimum change,
+  write a regression test, verify the original reproduction. Refuses to
+  ship a fix without a regression test for the failure mode. Invoked via
+  `/lifecycle:debugging`.
+- `simplify` skill — pre-PR self-audit on a diff: dead code, premature
+  abstraction, speculative flexibility, over-defensive guards, comments
+  that restate code, single-use helpers. Produces concrete deletion
+  proposals (WHAT / WHY / BEFORE / AFTER / RISK). Invoked via
+  `/lifecycle:simplify`.
+- `ship` skill — executes a release: pre-flight checks, version bump,
+  CHANGELOG finalize, commit, annotated tag, push, GitHub release. Reads
+  `docs/guides/releasing.md` first if present and follows it; falls back
+  to Keep-a-Changelog + SemVer defaults otherwise. Refuses release on a
+  dirty tree, behind-remote branch, or with failing CI. Invoked via
+  `/lifecycle:ship`.
+
+**Changed:**
+
+- `philosophy:orient` bumped to 0.2 — routing table now lists the four
+  new lifecycle skills; tie-breakers expanded to disambiguate
+  investigation vs. execution, simplify vs. review, fix vs. investigate.
+
+**Why:** lifecycle was effectively empty (one skill — code-review). The
+plan called for a "feels complete for solo-dev daily work" plugin: the
+recurring actions a developer performs day to day (branch / commit / PR,
+debug, simplify, release) without doc-bootstrapping. Each new skill is
+opinionated where the project conventions are absent and deferential when
+they're present (read CLAUDE.md / AGENTS.md / CONTRIBUTING.md first).
+The orient routing update keeps the meta-skill's tables in sync — the
+moment a leaf skill exists but isn't routed, the discovery layer breaks.
+
+---
+
 ### philosophy@0.3.0 — orient meta-skill + operating-behaviors
 
 **Added:**

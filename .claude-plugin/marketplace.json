@@ -17,8 +17,8 @@
     {
       "name": "lifecycle",
       "source": "./plugins/lifecycle",
-      "description": "Daily work skills — code review, git workflow, debugging, shipping",
-      "version": "0.1.0",
+      "description": "Daily work skills — code review, git workflow, debugging, simplification, shipping",
+      "version": "0.2.0",
       "author": {
         "name": "rodacato"
       }

@@ -24,10 +24,10 @@ core principles + operating behaviors).
 │   │   ├── .claude-plugin/plugin.json
 │   │   ├── commands/             # /launchpad:docs|ci|infra|process
 │   │   └── skills/               # vision, architecture, devcontainer, kamal, ...
-│   ├── lifecycle/                # Daily work plugin (v0.1.0)
+│   ├── lifecycle/                # Daily work plugin (v0.2.0)
 │   │   ├── .claude-plugin/plugin.json
-│   │   ├── commands/             # /lifecycle:review
-│   │   └── skills/               # code-review (more coming)
+│   │   ├── commands/             # /lifecycle:review|git-workflow|debugging|simplify|ship
+│   │   └── skills/               # code-review, git-workflow, debugging, simplify, ship
 │   └── philosophy/               # Reference plugin (v0.3.0)
 │       ├── .claude-plugin/plugin.json
 │       ├── commands/             # /philosophy:panel, /philosophy:identity, /philosophy:voice, /philosophy:orient

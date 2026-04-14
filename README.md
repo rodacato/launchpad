@@ -14,7 +14,7 @@ and [Gentleman-Programming/gentle-ai](https://github.com/Gentleman-Programming/g
 | Plugin | Version | Purpose | Skills | Commands |
 |---|---|---|---|---|
 | **launchpad** | 0.7.0 | Project bootstrap — docs, infra, CI, process artifacts | 14 (vision, architecture, branding, roadmap, workflow, agents, notdefined, github, devcontainer, kamal, caddy, releasing, contributing, changelog) | `/launchpad:docs`, `/launchpad:ci`, `/launchpad:infra`, `/launchpad:process` |
-| **lifecycle** | 0.1.0 | Daily work skills — review, debug, ship | 1 (code-review; more coming) | `/lifecycle:review` |
+| **lifecycle** | 0.2.0 | Daily work skills — review, branch/commit/PR, debug, simplify, ship | 5 (code-review, git-workflow, debugging, simplify, ship) | `/lifecycle:review`, `/lifecycle:git-workflow`, `/lifecycle:debugging`, `/lifecycle:simplify`, `/lifecycle:ship` |
 | **philosophy** | 0.3.0 | Reference — expert panel, identity, voice, orient meta-skill, core principles + operating behaviors | 4 (experts, identity, voice, orient) | `/philosophy:panel`, `/philosophy:identity`, `/philosophy:voice`, `/philosophy:orient` |
 
 Install the ones you want, skip the ones you don't.
@@ -64,9 +64,25 @@ Each skill handles both create (from scratch) and update (preserve + extend).
 
 ```text
 /lifecycle:review <PR-number>
+/lifecycle:git-workflow [stage]
+/lifecycle:debugging <bug or failing-test>
+/lifecycle:simplify [target]
+/lifecycle:ship [target or version]
 ```
 
-More skills incoming — git-workflow, debugging, shipping.
+- `review` runs a multi-axis code review on a GitHub PR via `gh`.
+- `git-workflow` executes branch / commit / PR per the project's CLAUDE.md
+  + AGENTS.md + CONTRIBUTING.md conventions; refuses destructive ops without
+  confirmation.
+- `debugging` walks a systematic process — reproduce, isolate, hypothesize,
+  test the hypothesis BEFORE changing code, fix minimally, write a regression
+  test, verify the original reproduction.
+- `simplify` audits a diff for what doesn't earn its keep (dead code,
+  premature abstractions, speculative flexibility, over-defensive guards)
+  and proposes concrete deletions.
+- `ship` cuts a release — pre-flight checks, version bump, CHANGELOG
+  finalize, tag, push, GitHub release; follows `docs/guides/releasing.md`
+  if present.
 
 ### philosophy — reference material
 
@@ -103,7 +119,7 @@ kwik-e-dev/                           ← repo root
 │   ├── lifecycle/                    ← daily work plugin
 │   │   ├── .claude-plugin/plugin.json
 │   │   ├── commands/
-│   │   └── skills/{code-review, ...}
+│   │   └── skills/{code-review, git-workflow, debugging, simplify, ship}
 │   └── philosophy/                   ← reference plugin
 │       ├── .claude-plugin/plugin.json
 │       ├── commands/
