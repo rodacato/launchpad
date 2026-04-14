@@ -96,3 +96,8 @@ coverage/
 *.log
 tmp/
 .cache/
+
+# ──────────────────────────────────────────────
+# Local working notes (not committed)
+# ──────────────────────────────────────────────
+PLAN.md
