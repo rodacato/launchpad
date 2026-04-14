@@ -2,7 +2,7 @@
 name: orient
 description: Meta-skill — load FIRST when uncertain which kwik-e-marketplace skill applies to the task at hand. Routes the task across launchpad / lifecycle / philosophy and returns the right skill name with one-line reasoning. Use when starting a session and the task isn't obvious. Use when a request could plausibly fit multiple skills. Use when the agent is about to "wing it" because nothing matched on first pass. Use to ground the agent in the inherited core principles and operating behaviors before any other skill loads.
 metadata:
-  version: "0.1"
+  version: "0.2"
 ---
 
 # Orient
@@ -105,12 +105,16 @@ Task arrives — what does completing it produce?
 | The human wants… | Use |
 |---|---|
 | Multi-axis review of an open PR | `lifecycle:review` |
+| Branch from issue / commit / open PR (project-aware git hygiene) | `lifecycle:git-workflow` |
+| Systematically debug a failing test, build, or behavior | `lifecycle:debugging` |
+| Audit a diff and propose deletions for code that doesn't earn its keep | `lifecycle:simplify` |
+| Cut a release (bump, CHANGELOG, tag, push, GitHub release) | `lifecycle:ship` |
 
-> **Lifecycle is intentionally small today.** Future skills (`debugging`,
-> `simplify`, `git-workflow`, `ship`, plus an SDD-lite suite) are tracked in
-> the marketplace plan. If the request fits one of those — name it, suggest
-> the human file an issue, and execute directly using `core-principles` +
-> `operating-behaviors` as guidance.
+> **SDD-lite skills** (`sdd-spec`, `sdd-plan`, `sdd-tasks`, `sdd-apply`,
+> `sdd-verify`) are tracked in the marketplace plan but not yet shipped.
+> If the request fits one of those — name it, suggest the human file an
+> issue, and execute directly using `core-principles` + `operating-behaviors`
+> as guidance.
 
 #### PHILOSOPHY — `philosophy` (reference / advisory / persona)
 
@@ -137,6 +141,18 @@ Apply these tie-breakers, in order, until one wins:
 4. **Refresh-the-floor vs. project work?** If the task is "update the
    universal rules" — that's the shared source files (`core-principles.md`,
    `operating-behaviors.md`), not a skill.
+5. **Investigation vs. execution?** Investigation (why is X broken? what's
+   the diff doing wrong?) → `lifecycle:debugging` or `lifecycle:simplify`.
+   Execution (commit, PR, release) → `lifecycle:git-workflow` or
+   `lifecycle:ship`.
+6. **Diff-as-evidence vs. diff-as-target?** Reviewing a PR for
+   correctness / architecture / security → `lifecycle:review`. Auditing
+   YOUR OWN recent diff to remove what doesn't earn its keep before opening
+   the PR → `lifecycle:simplify`. Different audiences, different bars.
+7. **Fix vs. investigate?** If the cause is unknown →
+   `lifecycle:debugging` first (find the cause, write the regression test).
+   If the cause is known and the change is mechanical → no skill, just do
+   it (with `core-principles` loaded).
 
 ### Step 5 — Report the routing
 
