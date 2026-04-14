@@ -4,15 +4,18 @@
 > Three plugins for bootstrapping projects, governing daily work, and consulting
 > the reference material behind it all.
 
+Inspired by [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills)
+and [Gentleman-Programming/gentle-ai](https://github.com/Gentleman-Programming/gentle-ai).
+
 ---
 
 ## Plugins
 
-| Plugin | Purpose | Commands |
-|---|---|---|
-| **launchpad** | Project bootstrap — docs, infra, CI, process artifacts | `/launchpad:docs`, `/launchpad:ci`, `/launchpad:infra`, `/launchpad:process` |
-| **lifecycle** | Daily work skills — review, debug, ship | `/lifecycle:review` (more coming) |
-| **philosophy** | Reference — expert panel, identity | `/philosophy:panel`, `/philosophy:identity` |
+| Plugin | Version | Purpose | Skills | Commands |
+|---|---|---|---|---|
+| **launchpad** | 0.7.0 | Project bootstrap — docs, infra, CI, process artifacts | 14 (vision, architecture, branding, roadmap, workflow, agents, notdefined, github, devcontainer, kamal, caddy, releasing, contributing, changelog) | `/launchpad:docs`, `/launchpad:ci`, `/launchpad:infra`, `/launchpad:process` |
+| **lifecycle** | 0.1.0 | Daily work skills — review, debug, ship | 1 (code-review; more coming) | `/lifecycle:review` |
+| **philosophy** | 0.2.0 | Reference — expert panel, identity, voice, core principles | 3 (experts, identity, voice) | `/philosophy:panel`, `/philosophy:identity`, `/philosophy:voice` |
 
 Install the ones you want, skip the ones you don't.
 
@@ -70,10 +73,14 @@ More skills incoming — git-workflow, debugging, shipping.
 ```text
 /philosophy:panel <question or topic>
 /philosophy:identity
+/philosophy:voice [style-name]
 ```
 
-`panel` consults a curated advisory panel (Architect, DevX, Prompting, etc.).
-`identity` creates or updates `docs/IDENTITY.md` — how the team actually works.
+- `panel` consults a curated advisory panel (Architect, DevX, Prompting, etc.).
+- `identity` creates or updates `docs/IDENTITY.md` — the project's Build Identity,
+  with an inherited `## Core Principles` block from `philosophy/shared/core-principles.md`.
+- `voice` creates or updates a Claude Code output style at `~/.claude/output-styles/`
+  — the user-level voice the agent uses across every project.
 
 ---
 
@@ -95,7 +102,8 @@ kwik-e-dev/                           ← repo root
 │   └── philosophy/                   ← reference plugin
 │       ├── .claude-plugin/plugin.json
 │       ├── commands/
-│       └── skills/{experts, identity}
+│       ├── shared/{core-principles.md}  ← inherited by every Identity
+│       └── skills/{experts, identity, voice}
 ├── docs/
 │   ├── EXPERTS.md                   ← reference panel consulted by skills
 │   ├── IDENTITY.md                  ← how this team works

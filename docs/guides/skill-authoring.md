@@ -49,17 +49,28 @@ name: <lowercase-hyphenated>
 description: <one-sentence WHAT>. Use when <trigger 1>. Use when <trigger 2>.
 metadata:
   version: "0.1"
-  author: rodacato
-  category: bootstrap | lifecycle | philosophy
-  triggers:
-    - <keyword>
-    - <natural phrase>
 ---
 ```
 
-The `description` is what the agent reads to decide whether THIS skill applies to
-the current task. Load it with trigger phrases like `Use when X`. A naked
-one-liner loses auto-discovery.
+That's the entire frontmatter. Three keys total.
+
+- `name` — lowercase, hyphenated; must match the skill's directory name
+- `description` — what the skill does AND when to use it. The agent reads this
+  to auto-discover which skill fits the task. Load it with `Use when X.` clauses
+  — at least 2, ideally 3-4. A naked one-liner loses auto-discovery.
+- `metadata.version` — semver string. Bump on any behavior-changing edit.
+
+**What is intentionally NOT in the frontmatter:**
+
+- `metadata.author` — plugin-level info, lives in `plugin.json`
+- `metadata.category` — the plugin IS the category (`launchpad` = bootstrap,
+  `lifecycle` = lifecycle, `philosophy` = philosophy)
+- `metadata.triggers` — keyword arrays duplicate the description's `Use when`
+  clauses. Put trigger language inline in the description instead
+
+Inspired by [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills),
+which uses the same minimal shape and proved that auto-discovery works on
+description alone.
 
 ### 2. Title
 
@@ -148,11 +159,6 @@ name: <lowercase-hyphenated>
 description: <What the skill does>. Use when <trigger 1>. Use when <trigger 2>.
 metadata:
   version: "0.1"
-  author: rodacato
-  category: bootstrap | lifecycle | philosophy
-  triggers:
-    - <keyword>
-    - <natural phrase>
 ---
 
 # <Human Title>
@@ -234,7 +240,10 @@ written the Process.
 
 Before shipping a new skill, verify:
 
-- [ ] `description` contains at least one `Use when` trigger phrase
+- [ ] Frontmatter is exactly three keys: `name`, `description`, `metadata.version`
+      — no `author`, no `category`, no `triggers` array
+- [ ] `description` contains at least 2 `Use when ...` clauses inline (these
+      are the auto-discovery triggers; a one-liner won't be matched reliably)
 - [ ] `When to Use` has a `**When NOT to use:**` counter-list
 - [ ] Process steps are numbered and in execution order
 - [ ] At least 3 rows in Common Rationalizations
@@ -269,6 +278,20 @@ an action or a consultation, not a file.
 | A document, a config, a CI file, an infra artifact | `launchpad` |
 | A review, a commit, a merge, a deploy, a debug session | `lifecycle` |
 | An advisory consultation, a principles reference, a panel read-out | `philosophy` |
+
+Decision flowchart when the table is ambiguous:
+
+```text
+What does running this skill leave behind?
+
+   File(s) committed to the target project's git tree?
+       ├─ YES ──→ launchpad
+       └─ NO  ─→  Action affecting external state (PR comment, tag, deploy)?
+                      ├─ YES ──→ lifecycle
+                      └─ NO  ─→  Reference / advisory only?
+                                     ├─ YES ──→ philosophy
+                                     └─ NO  ─→  pause — talk to a human first
+```
 
 If unsure, ask before creating. Boundary-adjacent skills are worth a quick
 discussion.
