@@ -17,22 +17,22 @@ guide.
 
 ---
 
-## Two skill categories
+## Three skill categories
 
-Launchpad skills fall into one of two categories. Know which you're writing before
-you start — it changes the shape of the Process section.
+Skills in this marketplace fall into one of three categories. Each lives in its
+own plugin. Know which you're writing before you start — it changes the shape of
+the Process section.
 
-| Category | What it does | Output | Example |
-|---|---|---|---|
-| **bootstrap** | Sets up a project artifact | File(s) written to the project | `vision`, `devcontainer`, `github` |
-| **lifecycle** | Governs a recurring behavior | Action performed (review posted, commit made, tests written) | `code-review`, `git-workflow` (future) |
+| Category | Plugin | What it does | Output | Examples |
+|---|---|---|---|---|
+| **bootstrap** | `launchpad` | Sets up a project artifact | File(s) written to the project | `vision`, `architecture`, `devcontainer`, `github` |
+| **lifecycle** | `lifecycle` | Governs a recurring behavior | Action performed (review posted, commit made, tests run) | `code-review`, future: `git-workflow`, `debugging` |
+| **philosophy** | `philosophy` | Consulted for guidance | An advisory read-out or reference application | `experts`, `identity` |
 
-Bootstrap skills get installed and tracked in `.launchpad/manifest.yml`. Lifecycle
-skills are invoked on-demand and do NOT go in the manifest — nothing to version
-into the project.
-
-A third category — `philosophy` — covers reference material like `experts` and
-`identity`. Those are consulted, not executed.
+Bootstrap skills get tracked in a target project's `.launchpad/manifest.yml`
+(version per installed skill). Lifecycle and philosophy skills do NOT appear in
+the manifest — they run ON projects, not INTO them, and nothing needs to be
+versioned per target project.
 
 ---
 
@@ -253,27 +253,40 @@ Before shipping a new skill, verify:
 ## File structure per skill
 
 ```
-skills/<skill-name>/
+plugins/<plugin>/skills/<skill-name>/
 ├── SKILL.md          # The workflow (this template)
 ├── VERSION           # Semver, no newline (e.g. "0.1")
 └── template.md       # Bootstrap only — the artifact shape the agent produces
 ```
 
-Lifecycle skills don't need `template.md` — their "output" is an action, not a
-file.
+Lifecycle and philosophy skills don't need `template.md` — their "output" is
+an action or a consultation, not a file.
+
+**Which plugin do I drop my skill into?**
+
+| Skill produces... | Plugin |
+|---|---|
+| A document, a config, a CI file, an infra artifact | `launchpad` |
+| A review, a commit, a merge, a deploy, a debug session | `lifecycle` |
+| An advisory consultation, a principles reference, a panel read-out | `philosophy` |
+
+If unsure, ask before creating. Boundary-adjacent skills are worth a quick
+discussion.
 
 ---
 
 ## Examples in this repo
 
-| Skill | Category | What to study |
-|---|---|---|
-| [skills/code-review/SKILL.md](../../skills/code-review/SKILL.md) | lifecycle | Full new-format reference — Rationalizations, Red Flags, Verification, gh CLI commands |
-| [skills/vision/SKILL.md](../../skills/vision/SKILL.md) | bootstrap (old format) | Dialogue-driven step structure — will be upgraded to new format |
-| [skills/workflow/SKILL.md](../../skills/workflow/SKILL.md) | bootstrap (old format) | Customization-heavy skill with per-project variation |
+| Skill | Plugin | Category | What to study |
+|---|---|---|---|
+| [plugins/lifecycle/skills/code-review/SKILL.md](../../plugins/lifecycle/skills/code-review/SKILL.md) | lifecycle | lifecycle | Full new-format reference — Rationalizations, Red Flags, Verification, gh CLI commands |
+| [plugins/launchpad/skills/vision/SKILL.md](../../plugins/launchpad/skills/vision/SKILL.md) | launchpad | bootstrap | Dialogue-driven step structure with all new-format sections |
+| [plugins/philosophy/skills/experts/SKILL.md](../../plugins/philosophy/skills/experts/SKILL.md) | philosophy | philosophy | Reference skill — consultation-oriented rather than doc-producing |
 
-When in doubt, copy `skills/code-review/SKILL.md` and adapt. It's the canonical
-reference for the new format.
+When in doubt, copy the closest example and adapt:
+- **Lifecycle / workflow skill** → start from `code-review`
+- **Bootstrap / doc-producing skill** → start from `vision`
+- **Philosophy / reference skill** → start from `experts`
 
 ---
 

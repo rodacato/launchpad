@@ -5,46 +5,66 @@
 
 ## Project identity
 
-**Name**: Launchpad
-**Purpose**: Modular project setup system — composable modules that guide an AI agent through creating project docs, configuring infrastructure, and standardizing workflows
-**Stack**: Bash + Markdown
-**Stage**: active
-**GitHub Project Number**: <!-- set after creating project board -->
+**Name**: kwik-e-marketplace (repo: `kwik-e-dev`, currently still `launchpad` locally)
+**Purpose**: rodacato's personal Claude Code plugin marketplace. Three plugins:
+`launchpad` (project bootstrap), `lifecycle` (daily work skills), `philosophy`
+(reference material — experts panel, identity).
+**Stack**: Markdown + YAML, Claude Code plugin format
+**Stage**: active, pre-1.0
 
 ## Repository structure
 
 ```text
 .
-├── modules/
-│   ├── docs/              # Documentation modules (vision, identity, experts, etc.)
-│   ├── ci/                # CI/GitHub modules (github, labels, workflows, board)
-│   ├── infra/             # Infrastructure modules (devcontainer, kamal, caddy)
-│   └── process/           # Process modules (releasing, contributing, changelog)
-├── scripts/
-│   ├── run.sh             # Module runner — creates LAUNCHPAD_TASK.md
-│   └── check.sh           # Version checker — shows module status
-├── .launchpad/
-│   └── manifest.yml       # Installed module versions (for launchpad itself)
-├── CLAUDE.md          # ← you are here
-├── AGENTS.md          # Agent roles and startup behavior
-└── README.md          # Tool documentation
+├── .claude-plugin/
+│   └── marketplace.json          # Lists the three plugins
+├── plugins/
+│   ├── launchpad/                # Bootstrap plugin (v0.7.0)
+│   │   ├── .claude-plugin/plugin.json
+│   │   ├── commands/             # /launchpad:docs|ci|infra|process
+│   │   └── skills/               # vision, architecture, devcontainer, kamal, ...
+│   ├── lifecycle/                # Daily work plugin (v0.1.0)
+│   │   ├── .claude-plugin/plugin.json
+│   │   ├── commands/             # /lifecycle:review
+│   │   └── skills/               # code-review (more coming)
+│   └── philosophy/               # Reference plugin (v0.1.0)
+│       ├── .claude-plugin/plugin.json
+│       ├── commands/             # /philosophy:panel, /philosophy:identity
+│       └── skills/               # experts, identity
+├── docs/
+│   ├── EXPERTS.md                # Reference panel consulted by skills
+│   ├── IDENTITY.md
+│   └── guides/
+│       ├── development.md        # Local plugin dev loop
+│       ├── skill-authoring.md    # SKILL.md template and authoring process
+│       └── releasing.md
+├── .launchpad/manifest.yml       # Launchpad eating own dog food
+├── PLAN.md                       # Active decisions log for ongoing changes
+├── CHANGELOG.md
+├── AGENTS.md
+├── CLAUDE.md                     # ← you are here
+└── README.md                     # Marketplace-level documentation
 ```
 
 ## Core conventions
 
 - **Commits**: `type(scope): description` — types: feat, fix, docs, refactor, test, chore
+  - Scopes include: `launchpad`, `lifecycle`, `philosophy`, `skills`, `docs`, `marketplace`
 - **Branches**: `issue-{number}-{short-description}` — e.g. `issue-14-add-search-endpoint`
 - **PRs**: always reference the issue with `closes #N` in the PR body
 - **Tests**: write tests before or alongside code, never after a PR is opened
+- **Never** add Co-Authored-By lines or "Generated with Claude" attributions in
+  commits, PRs, or issues
 
 ## What NOT to do
 
-- Do not push directly to `main`
+- Do not push directly to `master`
 - Do not create issues — that is the human's job
 - Do not close issues manually — they close via PR merge (`closes #N`)
 - Do not modify `.env` or secrets — ask the human
 - Do not install global dependencies without noting them in the PR
-- Do not add Co-Authored-By lines or "Generated with" attributions in commits, PRs, or issues
+- Do not add skills outside the three existing plugins without first discussing
+  which plugin they belong to (bootstrap / lifecycle / philosophy)
 
 ## Environment
 
@@ -55,9 +75,28 @@ gh auth status
 git --version
 ```
 
+Plugin dev setup is documented in `docs/guides/development.md`.
+
 ## Project-specific notes
 
-- When editing a module, always read `modules/{category}/{name}/template.md` alongside `prompt.md` — they must stay in sync
-- Test `scripts/run.sh` changes by running them against a local test project, not this repo
-- `VERSION` files contain only a semver string (e.g. `1.0`) — no newlines, no extra content
-- The `scripts/check.sh` MODULES array and `scripts/run.sh` module lists must be kept in sync when adding or removing modules
+- **Bootstrap skills** produce files in target projects. They have `SKILL.md`,
+  `template.md`, and `VERSION`. The template must stay in sync with what the
+  SKILL.md tells the agent to produce.
+- **Lifecycle and philosophy skills** do not ship a `template.md` — their output
+  is an action (a review, a consultation), not a file.
+- **VERSION files** contain only a semver string (e.g. `1.0`) — no newlines.
+  Bump VERSION on every skill change that alters behavior, not just content.
+- **Skill format** is defined in `docs/guides/skill-authoring.md`. Every skill
+  must have Overview, When to Use, Process, Common Rationalizations, Red Flags,
+  and Verification sections.
+- **Commands** live at `plugins/<plugin>/commands/*.md`. Each command file has
+  a frontmatter `description` and dispatches to a skill by reading its `SKILL.md`.
+- **Marketplace and plugin versions** are tracked in:
+  - `.claude-plugin/marketplace.json` (each plugin's version in the entry)
+  - `plugins/<plugin>/.claude-plugin/plugin.json` (authoritative)
+  - They must match.
+- **CHANGELOG** entries are per-plugin under `## launchpad@X.Y.Z`,
+  `## lifecycle@X.Y.Z`, `## philosophy@X.Y.Z` sections since plugins version
+  independently.
+- **PLAN.md** tracks ongoing multi-step changes. When a plan is complete, move
+  the document to `docs/plans/` or delete it if fully captured in CHANGELOG.
