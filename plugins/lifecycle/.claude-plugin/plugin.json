@@ -1,0 +1,20 @@
+{
+  "name": "lifecycle",
+  "description": "Daily work skills — code review, git workflow, debugging, and shipping governed by rodacato's conventions and voice",
+  "version": "0.1.0",
+  "author": {
+    "name": "rodacato",
+    "email": "rodacato@gmail.com"
+  },
+  "homepage": "https://github.com/rodacato/kwik-e-dev",
+  "repository": "https://github.com/rodacato/kwik-e-dev",
+  "license": "MIT",
+  "keywords": [
+    "code-review",
+    "git-workflow",
+    "lifecycle",
+    "tdd",
+    "debugging",
+    "shipping"
+  ]
+}

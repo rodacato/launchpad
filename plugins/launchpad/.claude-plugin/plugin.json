@@ -1,0 +1,21 @@
+{
+  "name": "launchpad",
+  "description": "Project bootstrap — atomic skills for creating and updating docs, infrastructure, CI, and process artifacts when starting or evolving a project",
+  "version": "0.7.0",
+  "author": {
+    "name": "rodacato",
+    "email": "rodacato@gmail.com"
+  },
+  "homepage": "https://github.com/rodacato/kwik-e-dev",
+  "repository": "https://github.com/rodacato/kwik-e-dev",
+  "license": "MIT",
+  "keywords": [
+    "project-setup",
+    "docs",
+    "workflow",
+    "devcontainer",
+    "github",
+    "bootstrapping",
+    "templates"
+  ]
+}

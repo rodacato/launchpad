@@ -1,15 +1,33 @@
 {
-  "name": "launchpad-marketplace",
-  "description": "rodacato personal plugins",
+  "name": "kwik-e-marketplace",
+  "description": "rodacato's personal Claude Code plugins — bootstrap, lifecycle, and philosophy",
   "owner": {
     "name": "rodacato"
   },
   "plugins": [
     {
       "name": "launchpad",
-      "description": "Modular project setup — atomic skills for creating and updating project docs, configs, and workflows",
-      "version": "0.6.0",
-      "source": "./",
+      "source": "./plugins/launchpad",
+      "description": "Project bootstrap — docs, infra, CI, process skills",
+      "version": "0.7.0",
+      "author": {
+        "name": "rodacato"
+      }
+    },
+    {
+      "name": "lifecycle",
+      "source": "./plugins/lifecycle",
+      "description": "Daily work skills — code review, git workflow, debugging, shipping",
+      "version": "0.1.0",
+      "author": {
+        "name": "rodacato"
+      }
+    },
+    {
+      "name": "philosophy",
+      "source": "./plugins/philosophy",
+      "description": "Reference material — experts panel, identity, principles",
+      "version": "0.1.0",
       "author": {
         "name": "rodacato"
       }

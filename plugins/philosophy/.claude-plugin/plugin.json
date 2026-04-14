@@ -1,0 +1,20 @@
+{
+  "name": "philosophy",
+  "description": "Reference material — experts advisory panel, build identity, and working principles. The why behind how rodacato works.",
+  "version": "0.1.0",
+  "author": {
+    "name": "rodacato",
+    "email": "rodacato@gmail.com"
+  },
+  "homepage": "https://github.com/rodacato/kwik-e-dev",
+  "repository": "https://github.com/rodacato/kwik-e-dev",
+  "license": "MIT",
+  "keywords": [
+    "philosophy",
+    "experts",
+    "identity",
+    "principles",
+    "advisory",
+    "consulting"
+  ]
+}
