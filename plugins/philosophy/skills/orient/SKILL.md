@@ -2,7 +2,7 @@
 name: orient
 description: Meta-skill — load FIRST when uncertain which kwik-e-marketplace skill applies to the task at hand. Routes the task across launchpad / lifecycle / philosophy and returns the right skill name with one-line reasoning. Use when starting a session and the task isn't obvious. Use when a request could plausibly fit multiple skills. Use when the agent is about to "wing it" because nothing matched on first pass. Use to ground the agent in the inherited core principles and operating behaviors before any other skill loads.
 metadata:
-  version: "0.2"
+  version: "0.3"
 ---
 
 # Orient
@@ -109,12 +109,17 @@ Task arrives — what does completing it produce?
 | Systematically debug a failing test, build, or behavior | `lifecycle:debugging` |
 | Audit a diff and propose deletions for code that doesn't earn its keep | `lifecycle:simplify` |
 | Cut a release (bump, CHANGELOG, tag, push, GitHub release) | `lifecycle:ship` |
+| **SDD-lite step 1**: write spec.md (WHAT, WHY, success criteria) for a substantial change | `lifecycle:sdd-spec` |
+| **SDD-lite step 2**: write plan.md with chosen design + alternatives considered | `lifecycle:sdd-plan` |
+| **SDD-lite step 3**: write tasks.md, ordered checklist of atomic steps | `lifecycle:sdd-tasks` |
+| **SDD-lite step 4**: execute the next unchecked task (one-at-a-time, stops at checkpoints) | `lifecycle:sdd-apply` |
+| **SDD-lite step 5**: validate implementation against spec; APPROVE or REQUEST CHANGES | `lifecycle:sdd-verify` |
 
-> **SDD-lite skills** (`sdd-spec`, `sdd-plan`, `sdd-tasks`, `sdd-apply`,
-> `sdd-verify`) are tracked in the marketplace plan but not yet shipped.
-> If the request fits one of those — name it, suggest the human file an
-> issue, and execute directly using `core-principles` + `operating-behaviors`
-> as guidance.
+> **SDD-lite is opinionated and file-based.** Artifacts land in
+> `docs/sdd/<change-name>/` (committable, reviewable, no external memory
+> store). The human drives transitions between phases — there is no
+> orchestrator. Use SDD-lite for substantial changes; skip it for trivial
+> fixes.
 
 #### PHILOSOPHY — `philosophy` (reference / advisory / persona)
 
@@ -153,6 +158,18 @@ Apply these tie-breakers, in order, until one wins:
    `lifecycle:debugging` first (find the cause, write the regression test).
    If the cause is known and the change is mechanical → no skill, just do
    it (with `core-principles` loaded).
+8. **Substantial change vs. quick task?** If the change crosses multiple
+   files, multiple sessions, or has fuzzy success criteria → SDD-lite
+   (`lifecycle:sdd-spec` first, then plan / tasks / apply / verify in
+   order, human-driven transitions). If the change is one-shot and the
+   path is obvious → no SDD ceremony; go straight to the work.
+9. **Already mid-SDD vs. starting fresh?** If `docs/sdd/<change-name>/`
+   exists, pick up from where the artifacts left off (latest accepted
+   phase). If nothing exists, start at `lifecycle:sdd-spec`.
+10. **Spec-fit vs. code-quality?** Asking "did we deliver the spec?" →
+    `lifecycle:sdd-verify`. Asking "is this code well-written?" →
+    `lifecycle:review`. They're complementary; for a substantial SDD
+    change, run both before merging.
 
 ### Step 5 — Report the routing
 
