@@ -2,7 +2,7 @@
 name: identity
 description: Create or update docs/IDENTITY.md — the Build Identity, the technical persona the agent embodies on this project. Use when starting a new project that needs a consistent decision-making voice. Use when the agent's judgment feels generic or inconsistent across sessions. Use when VISION.md is set and you need a persona that can defend it. Use before writing EXPERTS.md — the Identity's gaps shape the panel.
 metadata:
-  version: "1.2"
+  version: "1.3"
   author: rodacato
   category: philosophy
   triggers:
@@ -43,6 +43,10 @@ Locate and read these first — the Identity must serve them:
 
 - `VISION.md` — read it first. Identity must serve the vision.
 - `ARCHITECTURE.md` — if it exists, identity should reflect the stack expertise
+- `plugins/philosophy/shared/core-principles.md` — the inherited base block
+  that gets injected into every generated IDENTITY.md. Read it so you know
+  what the Identity already inherits and do NOT duplicate those principles
+  in the project-specific sections.
 
 ```bash
 fd VISION.md --exclude .git
@@ -51,6 +55,14 @@ fd ARCHITECTURE.md --exclude .git
 
 If VISION.md doesn't exist, STOP — run the `vision` skill first. An Identity
 without a vision is a persona with nothing to defend.
+
+**About the inherited Core Principles:** the template's `## Core Principles
+(inherited)` block is copied inline — verbatim — from
+`plugins/philosophy/shared/core-principles.md`. It carries a version comment
+(`<!-- inherited from philosophy/core-principles vX.Y -->`). When creating
+OR updating an IDENTITY.md, always copy the CURRENT version of that file
+into the block. Never paraphrase or edit it in the target project — the
+shared file is the source of truth.
 
 ## Process
 
@@ -84,6 +96,16 @@ Write the full identity using the template at `skills/identity/template.md`.
 Make it feel like a REAL person — with opinions, a backstory, and a clear
 decision-making framework. Not a generic checklist.
 
+**Inject the inherited Core Principles block first.** Before filling in the
+persona-specific sections, replace the `## Core Principles (inherited)`
+block in the template with the current contents of
+`plugins/philosophy/shared/core-principles.md` (verbatim, including the
+`<!-- inherited from philosophy/core-principles vX.Y -->` version marker).
+This is non-negotiable — an Identity without the inherited floor is missing
+rules every project needs. Do NOT re-state these principles inside the
+persona's Philosophy / Decision Style / Quality Bar sections; those sections
+are for project-specific opinions layered on top.
+
 Key things a strong Identity has:
 - A name (even if it's a handle — makes them consultable)
 - A backstory with specific industry / project experience
@@ -99,10 +121,18 @@ Show it to the human. Refine until approved.
 1. Locate it: `fd IDENTITY.md --exclude .git`
 2. Read the current file end-to-end
 3. Read `skills/identity/template.md` for new sections
-4. Identify sections that are missing or could benefit from improvement
-5. Propose the diff to the human
-6. Update with approved changes — **preserve the full persona as established**;
-   the voice and opinions are not yours to rewrite
+4. Read `plugins/philosophy/shared/core-principles.md` and compare its
+   version marker (`<!-- philosophy/core-principles vX.Y -->`) against
+   the version in the target IDENTITY.md's `## Core Principles (inherited)`
+   block. If they differ, the inherited block needs refreshing.
+5. Identify sections that are missing or could benefit from improvement
+6. Propose the diff to the human — include the inherited-block refresh as
+   a separate, clearly labeled change
+7. Update with approved changes:
+   - Replace the `## Core Principles (inherited)` block verbatim from the
+     current shared source (if refreshing) — do NOT hand-edit it
+   - **Preserve the full persona as established** in every other section;
+     the voice and opinions are not yours to rewrite
 
 ## Consultation flow (how the Identity is USED)
 
@@ -124,6 +154,8 @@ This skill PRODUCES the Identity. Once written, the Identity is invoked as follo
 | "Tiebreaker hierarchy is overkill" | Without it, every 50/50 decision becomes a new meeting. Tiebreakers make fast consistent decisions possible. |
 | "The Identity will just agree with whatever the human says" | Only if you write them that way. A good Identity pushes back when the human asks for scope creep or skips tests. |
 | "I'll skip the 'known gaps' section" | Without it, the Identity pretends to know everything — which means EXPERTS.md never gets consulted even when it should. |
+| "The inherited Core Principles feel redundant — the Identity already implies them" | No. Implicit is not enforceable. The inherited block is what makes cross-project behavior consistent even when a specific IDENTITY.md is vague. |
+| "I'll tweak the inherited principles to match this project's tone" | Don't. They are the floor, not the decor. Tone adjustments belong in the Voice (output style), not in the shared base. Edit the shared source if the floor itself is wrong. |
 
 ## Red Flags
 
@@ -135,10 +167,14 @@ This skill PRODUCES the Identity. Once written, the Identity is invoked as follo
 - Persona doesn't reflect anything specific about THIS project's vision or stack
 - Voice is inconsistent — first paragraph mentors, second paragraph commands, third explains
 - Backstory is one sentence ("10 years experience")
+- `## Core Principles (inherited)` block is missing, hand-edited, or lacks the `<!-- philosophy/core-principles vX.Y -->` version marker
+- Inherited principles are also repeated verbatim inside Philosophy / Decision Style / Quality Bar (duplication instead of layering)
 
 ## Verification
 
 - [ ] `docs/IDENTITY.md` exists
+- [ ] `## Core Principles (inherited)` block is present at the top, with a `<!-- inherited from philosophy/core-principles vX.Y -->` version marker matching the current shared source
+- [ ] Inherited block content matches the shared source verbatim (no hand-edits)
 - [ ] Persona has a name and a backstory with specific industry / project experience
 - [ ] At least 3 non-negotiables listed, each concrete enough that the Identity would actually push back
 - [ ] Tiebreaker hierarchy is explicit (e.g. simplicity > performance > DX) with worked examples
@@ -146,13 +182,15 @@ This skill PRODUCES the Identity. Once written, the Identity is invoked as follo
 - [ ] "Known gaps" section present, naming domains the Identity defers to experts on
 - [ ] Identity references this project's VISION.md specifically (not generic "align with vision")
 - [ ] Read aloud: the persona sounds like a specific person you could have a disagreement with
-- [ ] `.launchpad/manifest.yml` updated with `identity: "1.2"` under `modules:`
+- [ ] Persona sections do NOT duplicate the inherited principles verbatim — they layer on top
+- [ ] `.launchpad/manifest.yml` updated with `identity: "1.3"` under `modules:`
 
 ## When done
 
-Update `.launchpad/manifest.yml` — set `identity: "1.2"` under `modules:`.
+Update `.launchpad/manifest.yml` — set `identity: "1.3"` under `modules:`.
 
 Next likely skills:
 - `experts` — build the advisory panel that fills this Identity's known gaps
+- `voice` — set the user-level Claude Code output style (tone, idioms, language); Identity = what the agent thinks, Voice = how it sounds
 - `architecture` — the Identity's stack opinions inform how architecture is written
 - `workflow` — encode the Identity's daily operating rhythm
