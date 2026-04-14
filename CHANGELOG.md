@@ -9,6 +9,61 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### lifecycle@0.3.0 — SDD-lite (spec → plan → tasks → apply → verify)
+
+**Added:**
+
+- `sdd-spec` skill — SDD-lite step 1. Writes
+  `docs/sdd/<change-name>/spec.md` with WHAT (in/out of scope), WHY
+  (motivation), HOW WE'LL KNOW (success criteria, constraints, open
+  questions). Refuses to ship a spec with empty sections or vague success
+  criteria. Invoked via `/lifecycle:sdd-spec <change-name>`.
+- `sdd-plan` skill — SDD-lite step 2. Writes
+  `docs/sdd/<change-name>/plan.md` with the chosen design, ≥2 alternatives
+  considered, key decisions with rationale, risks / mitigations table, and
+  a concrete rollback plan. Refuses to plan against a draft spec or one
+  with unresolved open questions. Invoked via `/lifecycle:sdd-plan
+  <change-name>`.
+- `sdd-tasks` skill — SDD-lite step 3. Writes
+  `docs/sdd/<change-name>/tasks.md` as an ordered checklist of atomic
+  tasks (each with Expected output / Verify / Files touched / Depends on)
+  plus checkpoints before any irreversible step. Invoked via
+  `/lifecycle:sdd-tasks <change-name>`.
+- `sdd-apply` skill — SDD-lite step 4. Picks ONE unchecked task from
+  tasks.md, executes it, runs the task's Verify step, marks the box,
+  appends notes for any deviations, commits implementation + tasks-file
+  update together. Stops at every CHECKPOINT and waits for human "pass".
+  Does NOT auto-continue. Invoked via `/lifecycle:sdd-apply <change-name>`.
+- `sdd-verify` skill — SDD-lite step 5. Validates the implementation
+  against the accepted spec by walking every success criterion,
+  constraint, and out-of-scope item. Reports CRITICAL / WARNING /
+  SUGGESTION findings with code references and renders verdict APPROVE
+  or REQUEST CHANGES. Persists the verdict to tasks.md as an audit
+  trail. NOT a code-quality review (that's `lifecycle:review`). Invoked
+  via `/lifecycle:sdd-verify <change-name>`.
+
+**Changed:**
+
+- `philosophy:orient` bumped to 0.3 — routing table now lists the five
+  SDD-lite skills in the lifecycle section; tie-breakers expanded with
+  three new entries (substantial-vs-quick, mid-SDD-vs-fresh, spec-fit-
+  vs-code-quality).
+- `lifecycle/.claude-plugin/plugin.json` keywords now include `sdd` and
+  `spec-driven-development`.
+
+**Why:** Substantial changes — multi-file, multi-session, fuzzy success
+criteria — kept being attempted as one-shot tasks because there was no
+structured path through them. SDD-lite is the path: file-based artifacts
+under `docs/sdd/<change-name>/` (committable, reviewable), human-driven
+phase transitions (no orchestrator, no sub-agents), no external memory
+store. Each step is a small, opinionated skill that refuses to start when
+its inputs aren't ready, so the artifacts can't drift out of sync. The
+five-step chain is opinionated where the project's conventions are absent
+and deferential where they're present (reads VISION / ARCHITECTURE /
+IDENTITY for context).
+
+---
+
 ### lifecycle@0.2.0 — Lifecycle breadth (git-workflow, debugging, simplify, ship)
 
 **Added:**

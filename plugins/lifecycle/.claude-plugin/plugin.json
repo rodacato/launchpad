@@ -1,7 +1,7 @@
 {
   "name": "lifecycle",
   "description": "Daily work skills — code review, git workflow, debugging, and shipping governed by rodacato's conventions and voice",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": {
     "name": "rodacato",
     "email": "rodacato@gmail.com"
@@ -15,6 +15,8 @@
     "lifecycle",
     "tdd",
     "debugging",
-    "shipping"
+    "shipping",
+    "sdd",
+    "spec-driven-development"
   ]
 }

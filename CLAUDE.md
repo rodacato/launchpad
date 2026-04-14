@@ -24,10 +24,10 @@ core principles + operating behaviors).
 │   │   ├── .claude-plugin/plugin.json
 │   │   ├── commands/             # /launchpad:docs|ci|infra|process
 │   │   └── skills/               # vision, architecture, devcontainer, kamal, ...
-│   ├── lifecycle/                # Daily work plugin (v0.2.0)
+│   ├── lifecycle/                # Daily work plugin (v0.3.0)
 │   │   ├── .claude-plugin/plugin.json
-│   │   ├── commands/             # /lifecycle:review|git-workflow|debugging|simplify|ship
-│   │   └── skills/               # code-review, git-workflow, debugging, simplify, ship
+│   │   ├── commands/             # /lifecycle:review|git-workflow|debugging|simplify|ship + sdd-{spec,plan,tasks,apply,verify}
+│   │   └── skills/               # code-review, git-workflow, debugging, simplify, ship, sdd-{spec,plan,tasks,apply,verify}
 │   └── philosophy/               # Reference plugin (v0.3.0)
 │       ├── .claude-plugin/plugin.json
 │       ├── commands/             # /philosophy:panel, /philosophy:identity, /philosophy:voice, /philosophy:orient
@@ -117,3 +117,8 @@ Plugin dev setup is documented in `docs/guides/development.md`.
   matching skill isn't obvious — it walks a decision tree across all three
   plugins and returns one routing decision plus the loaded floor. Skip it
   for unambiguous tasks.
+- **SDD-lite artifacts** (substantial changes): `docs/sdd/<change-name>/`
+  holds `spec.md`, `plan.md`, `tasks.md`. Each artifact is committed; no
+  external memory store. Phase transitions are human-driven via the five
+  `lifecycle:sdd-*` skills (spec → plan → tasks → apply → verify). For
+  trivial fixes, skip SDD entirely.

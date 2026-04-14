@@ -14,7 +14,7 @@ and [Gentleman-Programming/gentle-ai](https://github.com/Gentleman-Programming/g
 | Plugin | Version | Purpose | Skills | Commands |
 |---|---|---|---|---|
 | **launchpad** | 0.7.0 | Project bootstrap — docs, infra, CI, process artifacts | 14 (vision, architecture, branding, roadmap, workflow, agents, notdefined, github, devcontainer, kamal, caddy, releasing, contributing, changelog) | `/launchpad:docs`, `/launchpad:ci`, `/launchpad:infra`, `/launchpad:process` |
-| **lifecycle** | 0.2.0 | Daily work skills — review, branch/commit/PR, debug, simplify, ship | 5 (code-review, git-workflow, debugging, simplify, ship) | `/lifecycle:review`, `/lifecycle:git-workflow`, `/lifecycle:debugging`, `/lifecycle:simplify`, `/lifecycle:ship` |
+| **lifecycle** | 0.3.0 | Daily work skills — review, branch/commit/PR, debug, simplify, ship + SDD-lite (spec → plan → tasks → apply → verify) | 10 (code-review, git-workflow, debugging, simplify, ship, sdd-spec, sdd-plan, sdd-tasks, sdd-apply, sdd-verify) | `/lifecycle:review`, `/lifecycle:git-workflow`, `/lifecycle:debugging`, `/lifecycle:simplify`, `/lifecycle:ship`, `/lifecycle:sdd-spec`, `/lifecycle:sdd-plan`, `/lifecycle:sdd-tasks`, `/lifecycle:sdd-apply`, `/lifecycle:sdd-verify` |
 | **philosophy** | 0.3.0 | Reference — expert panel, identity, voice, orient meta-skill, core principles + operating behaviors | 4 (experts, identity, voice, orient) | `/philosophy:panel`, `/philosophy:identity`, `/philosophy:voice`, `/philosophy:orient` |
 
 Install the ones you want, skip the ones you don't.
@@ -84,6 +84,24 @@ Each skill handles both create (from scratch) and update (preserve + extend).
   finalize, tag, push, GitHub release; follows `docs/guides/releasing.md`
   if present.
 
+#### SDD-lite — structured workflow for substantial changes
+
+```text
+/lifecycle:sdd-spec   <change-name>     ← step 1: WHAT, WHY, success criteria
+/lifecycle:sdd-plan   <change-name>     ← step 2: chosen design + alternatives
+/lifecycle:sdd-tasks  <change-name>     ← step 3: ordered atomic steps
+/lifecycle:sdd-apply  <change-name>     ← step 4: execute one task at a time
+/lifecycle:sdd-verify <change-name>     ← step 5: validate against spec
+```
+
+Artifacts land at `docs/sdd/<change-name>/` (committable, reviewable).
+Each step refuses to start when its inputs aren't ready (e.g. `sdd-plan`
+won't plan against a draft spec). Phase transitions are human-driven —
+no orchestrator, no sub-agents, no external memory store.
+
+Use SDD-lite for changes that span multiple files / sessions or have fuzzy
+success criteria. For trivial fixes, skip the ceremony.
+
 ### philosophy — reference material
 
 ```text
@@ -119,7 +137,8 @@ kwik-e-dev/                           ← repo root
 │   ├── lifecycle/                    ← daily work plugin
 │   │   ├── .claude-plugin/plugin.json
 │   │   ├── commands/
-│   │   └── skills/{code-review, git-workflow, debugging, simplify, ship}
+│   │   └── skills/{code-review, git-workflow, debugging, simplify, ship,
+│   │                sdd-spec, sdd-plan, sdd-tasks, sdd-apply, sdd-verify}
 │   └── philosophy/                   ← reference plugin
 │       ├── .claude-plugin/plugin.json
 │       ├── commands/
