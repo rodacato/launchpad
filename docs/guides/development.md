@@ -17,11 +17,6 @@ URL required — Claude Code reads `.claude-plugin/marketplace.json` directly.
 /plugin install philosophy@kwik-e-marketplace
 ```
 
-> **Repo hasn't been renamed yet?** The local path can be whatever your local
-> folder is actually named (currently `launchpad` until the GitHub rename lands).
-> Replace the path above with `/Users/adriancastillo/Workspace/rodacato/launchpad`
-> if that's still its name on disk.
-
 Confirm plugins are registered:
 
 ```bash

@@ -1,17 +1,41 @@
 # Releasing
 
-How to cut a release for this project.
-Follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Semantic Versioning](https://semver.org/).
+How to cut a release for kwik-e-marketplace. Each plugin versions independently,
+so a release is always **per plugin**, never marketplace-wide.
+
+Follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and
+[Semantic Versioning](https://semver.org/).
+
+---
+
+## Per-plugin versioning
+
+The three plugins ship on their own clocks:
+
+| Plugin | Versioned in |
+|---|---|
+| `launchpad` | `plugins/launchpad/.claude-plugin/plugin.json` |
+| `lifecycle` | `plugins/lifecycle/.claude-plugin/plugin.json` |
+| `philosophy` | `plugins/philosophy/.claude-plugin/plugin.json` |
+
+The marketplace-level file `.claude-plugin/marketplace.json` carries a copy of
+each plugin's version. **Both numbers must match** — if they drift, users on
+`/plugin install` get mystery mismatches.
+
+Tags on git are per-plugin too: `launchpad-v0.7.0`, `lifecycle-v0.1.0`,
+`philosophy-v0.2.0`. No repo-wide `vX.Y.Z` tag.
 
 ---
 
 ## When to release
 
-Release when a meaningful set of changes is ready to be stable.
-Don't release every commit. Don't let `[Unreleased]` grow for months.
+- A meaningful set of changes for **one plugin** is ready to be stable
+- Don't release every commit. Don't let `[Unreleased]` grow for months
+- A good release is a capability (a new skill, a format upgrade, a behavior
+  change) that's complete and tested
 
-A good release is a sprint that's mostly done, or a specific feature that's
-complete and stable enough to version.
+If you changed skills in two plugins in the same PR, that's two releases — do
+them separately.
 
 ---
 
@@ -19,89 +43,146 @@ complete and stable enough to version.
 
 | Change type | Version bump | Example |
 |---|---|---|
-| Bug fixes, small improvements | Patch — `0.1.X` | `0.1.0` → `0.1.1` |
-| New features, backward compatible | Minor — `0.X.0` | `0.1.0` → `0.2.0` |
-| Breaking changes | Major — `X.0.0` | `0.1.0` → `1.0.0` |
+| Bug fixes, typos, small clarifications in a SKILL.md | Patch — `0.0.X` | `0.7.0` → `0.7.1` |
+| New skill, new command, new section in a skill | Minor — `0.X.0` | `0.7.0` → `0.8.0` |
+| Rename a skill, remove a command, change invocation path | Major — `X.0.0` | `0.7.0` → `1.0.0` |
 
-Early projects (before `1.0.0`) use minor bumps for features and patch for fixes.
-The jump to `1.0.0` means: stable API, committed to not breaking things.
+Before `1.0.0`: use minor for features, patch for fixes.
+The jump to `1.0.0` means: invocation paths are stable, committed to not
+breaking what's installed.
 
 ---
 
 ## Release checklist
 
-### 1. Prepare CHANGELOG.md
+The example below releases `launchpad@0.8.0`. Swap the plugin name and version
+for whatever you're cutting.
 
-Open `CHANGELOG.md` and move everything under `[Unreleased]` to a new versioned section:
+### 1. Confirm the plugin is ready
+
+```bash
+/plugin validate                          # Validates marketplace.json + plugin.jsons + SKILL.mds
+git status                                 # No uncommitted skill or command changes
+```
+
+Run the plugin's commands one more time against a real project to smoke-test
+before tagging.
+
+### 2. Bump the version in both places
+
+Edit `plugins/launchpad/.claude-plugin/plugin.json`:
+
+```json
+{
+  "name": "launchpad",
+  "version": "0.8.0",
+  ...
+}
+```
+
+Edit the matching entry in `.claude-plugin/marketplace.json`:
+
+```json
+{
+  "name": "launchpad",
+  "source": "./plugins/launchpad",
+  "version": "0.8.0",
+  ...
+}
+```
+
+These must match exactly.
+
+### 3. Update CHANGELOG.md
+
+Move everything under `[Unreleased]` that applies to THIS plugin into a new
+dated section. Keep the other plugins' unreleased entries in place.
 
 ```markdown
-## [0.2.0] - 2026-04-15
-
-### Added
-- Search endpoint with pgvector similarity
-- CLI command: `recall search "query"`
-
-### Fixed
-- Empty results no longer crash the status command
-
 ## [Unreleased]
-(empty — new changes go here)
+
+### lifecycle@0.2.0 — <summary>
+...
+
+---
+
+## [launchpad@0.8.0] - 2026-05-03
+
+**Added:**
+- New skill: `kubernetes` under `plugins/launchpad/skills/kubernetes/`
+- `/launchpad:infra kubernetes` command
+
+**Changed:**
+- `devcontainer` skill: bumped to 1.2, adds ARM64 detection
+
+**Why:** Devcontainer wasn't probing architecture on Apple Silicon...
 ```
 
-Update the comparison link at the bottom:
+Add the comparison link at the bottom of the file:
 
 ```markdown
-[Unreleased]: https://github.com/rodacato/project/compare/v0.2.0...HEAD
-[0.2.0]: https://github.com/rodacato/project/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/rodacato/project/releases/tag/v0.1.0
+[launchpad@0.8.0]: https://github.com/rodacato/kwik-e-dev/compare/launchpad-v0.7.0...launchpad-v0.8.0
 ```
 
-### 2. Update version references
+### 4. Bump the affected skill VERSIONs
 
-Update the version in `.notdefined.yml`:
-
-```yaml
-version: "0.2.0"
-```
-
-Update any other version references in the project (gemspec, package.json, etc.):
+If you touched any `SKILL.md`, bump its sibling `VERSION` file. Minor for new
+sections or significant reformat, patch for typo fixes.
 
 ```bash
-# Find version strings to update
-grep -r "0\.1\.0" . --include="*.rb" --include="*.json" --include="*.yml" \
-  --exclude-dir=".git" --exclude-dir="node_modules"
+# For each changed skill:
+echo "1.2" > plugins/launchpad/skills/devcontainer/VERSION
 ```
 
-### 3. Commit the release
+No newline at the end — `VERSION` is a bare semver string.
+
+### 5. Commit the release
 
 ```bash
-git add CHANGELOG.md .notdefined.yml
-git commit -m "chore(release): v0.2.0"
+git add plugins/launchpad/.claude-plugin/plugin.json \
+        .claude-plugin/marketplace.json \
+        CHANGELOG.md \
+        plugins/launchpad/skills/*/VERSION
+git commit -m "chore(launchpad): release v0.8.0"
 ```
 
-### 4. Tag and push
+### 6. Tag and push
 
 ```bash
-git tag v0.2.0
-git push origin main
-git push origin v0.2.0
+git tag launchpad-v0.8.0
+git push origin master
+git push origin launchpad-v0.8.0
 ```
 
-### 5. Create the GitHub release
+### 7. Create the GitHub release
 
 ```bash
-gh release create v0.2.0 \
-  --title "v0.2.0" \
-  --notes "$(awk '/^## \[0\.2\.0\]/,/^## \[/' CHANGELOG.md | head -n -1)" \
-  --latest
+gh release create launchpad-v0.8.0 \
+  --title "launchpad@0.8.0" \
+  --notes "$(awk '/^## \[launchpad@0\.8\.0\]/,/^---/' CHANGELOG.md | sed '$d')" \
+  --latest=false
 ```
 
-Or interactively:
+Only one release at a time should be `--latest=true` across the three plugins —
+pick whichever was most recent if you care about the "Latest" badge on GitHub.
+Otherwise leave them all non-latest and users discover releases via
+`/plugin marketplace update`.
+
+---
+
+## How users pick up the release
+
+After the tag is pushed and visible on GitHub:
 
 ```bash
-gh release create v0.2.0 --generate-notes
-# Then edit the notes to match your CHANGELOG section
+/plugin marketplace update kwik-e-marketplace
+/plugin uninstall launchpad@kwik-e-marketplace
+/plugin install launchpad@kwik-e-marketplace
 ```
+
+The uninstall/install dance is required because Claude Code doesn't hot-swap
+installed plugin versions. Only new marketplace versions are detected by
+`update`.
 
 ---
 
@@ -111,39 +192,47 @@ For urgent fixes that can't wait for the next planned release:
 
 ```bash
 # Branch from the last tag
-git checkout v0.2.0
-git checkout -b hotfix-auth-crash
+git checkout launchpad-v0.8.0
+git checkout -b hotfix-launchpad-devcontainer
 
 # Fix, test, commit
-git commit -m "fix(auth): prevent crash on expired token"
+git commit -m "fix(launchpad/devcontainer): prevent crash on missing dockerfile"
 
-# Merge back to main
-git checkout main
-git merge hotfix-auth-crash
+# Merge back to master
+git checkout master
+git merge hotfix-launchpad-devcontainer
 
-# Release as patch
-git tag v0.2.1
-git push origin main v0.2.1
-gh release create v0.2.1 --title "v0.2.1 — hotfix" --notes "Fix: auth crash on expired token"
+# Bump patch in both plugin.json + marketplace.json → 0.8.1
+# Add CHANGELOG entry under launchpad@0.8.1
+
+git tag launchpad-v0.8.1
+git push origin master launchpad-v0.8.1
+gh release create launchpad-v0.8.1 \
+  --title "launchpad@0.8.1 — hotfix" \
+  --notes "Fix: devcontainer crash on missing Dockerfile"
 ```
 
 ---
 
-## What goes in each section
+## What goes in each CHANGELOG section
 
 | Section | Include |
 |---|---|
-| `Added` | New features, new commands, new endpoints |
-| `Changed` | Behavior changes in existing features |
-| `Deprecated` | Things that still work but will be removed |
-| `Removed` | Things that no longer exist |
-| `Fixed` | Bug fixes |
-| `Security` | Security patches — always mention CVE if applicable |
+| `Added` | New skills, new commands, new sections in a SKILL.md |
+| `Changed` | Behavior changes in existing skills, reformatted templates |
+| `Deprecated` | Skills or commands that still work but will be removed |
+| `Removed` | Skills or commands that no longer exist |
+| `Fixed` | Bugs in skill logic, broken command dispatch, template errors |
+| `Security` | Anything that changes exposure in generated files |
 
-**Do not include**:
-- Internal refactors with no user-visible effect → use `chore` commits but skip the changelog
-- Dependency bumps unless they change behavior → `chore(deps): bump X`
-- Test additions → not user-facing
+**Do not include:**
+
+- Internal refactors with no user-visible skill behavior change — use `chore`
+  commits but skip the changelog
+- Doc-only updates under `docs/guides/` unless they represent a workflow change
+  users need to know about
+- Version bumps to `VERSION` files alone — mention the skill changes that
+  caused them, not the bump itself
 
 ---
 
@@ -152,17 +241,20 @@ gh release create v0.2.1 --title "v0.2.1 — hotfix" --notes "Fix: auth crash on
 You can ask Claude Code to prepare a release:
 
 ```
-Prepare the release for v0.2.0. 
-Read CHANGELOG.md and the commits since the last tag.
-Update the [Unreleased] section with what changed.
-Update .notdefined.yml version.
-Show me the diff before committing anything.
+Prepare launchpad@0.8.0.
+Read CHANGELOG.md's [Unreleased] section and the commits since
+tag launchpad-v0.7.0.
+Move applicable entries under a new [launchpad@0.8.0] heading dated today.
+Bump plugin.json + marketplace.json to 0.8.0.
+Bump VERSION files for any skill I touched.
+Show me the full diff before committing.
 ```
 
-Or to draft the release notes:
+Or to draft release notes:
 
 ```
-Read the CHANGELOG.md section for v0.2.0 and the GitHub issues
-closed in this milestone. Write release notes in the Keep a Changelog
-format. Don't commit, just show me.
+Read CHANGELOG.md section [launchpad@0.8.0] and the GitHub issues
+closed on master since launchpad-v0.7.0.
+Write release notes in the Keep a Changelog format.
+Don't commit — just show me.
 ```

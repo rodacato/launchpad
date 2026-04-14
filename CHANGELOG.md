@@ -40,7 +40,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `docs/guides/skill-authoring.md` for the template)
 - `docs/guides/development.md` — local plugin dev workflow
 - `docs/guides/skill-authoring.md` — canonical skill template and process
-- `PLAN.md` — decisions log documenting the restructure (D1–D6)
 
 **Changed:**
 

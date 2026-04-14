@@ -12,12 +12,9 @@
 ### Startup
 
 1. Read `CLAUDE.md` for project context
-2. Read `PLAN.md` if it exists — there may be an active change in flight
-3. Run `gh issue list --assignee @me --state open` to see active issues
-4. If none assigned, run `gh issue list --state open --limit 10` and ask which to work
-5. Never start work without an associated issue number (for feature work)
-6. Exception: plan-driven changes tracked in `PLAN.md` don't need issues — the
-   plan IS the tracker
+2. Run `gh issue list --assignee @me --state open` to see active issues
+3. If none assigned, run `gh issue list --state open --limit 10` and ask which to work
+4. Never start work without an associated issue number (for feature work)
 
 ### Responsibilities
 
@@ -32,7 +29,6 @@
 ### Rules
 
 - All feature changes happen on a branch tied to an issue number
-- Plan-driven restructures can happen on `master` if documented in `PLAN.md`
 - Never push directly to `master` for feature work
 - PRs always include `closes #N`
 - When editing a bootstrap skill: re-read its `template.md` first to stay in sync

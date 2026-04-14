@@ -97,10 +97,12 @@ kwik-e-dev/                           ← repo root
 │       ├── commands/
 │       └── skills/{experts, identity}
 ├── docs/
+│   ├── EXPERTS.md                   ← reference panel consulted by skills
+│   ├── IDENTITY.md                  ← how this team works
 │   └── guides/
-│       ├── development.md            ← plugin dev loop
-│       └── skill-authoring.md        ← how to write a new skill
-├── PLAN.md                           ← decisions log
+│       ├── development.md           ← plugin dev loop
+│       ├── releasing.md             ← release checklist per plugin
+│       └── skill-authoring.md       ← how to write a new skill
 ├── CHANGELOG.md
 └── README.md
 ```
@@ -136,5 +138,6 @@ Writing a new skill? See
 [docs/guides/skill-authoring.md](docs/guides/skill-authoring.md) for the SKILL.md
 template, section-by-section anatomy, and a pre-ship quality checklist.
 
-Tracking the restructure that produced this layout? See
-[PLAN.md](PLAN.md) for the decisions log.
+Cutting a release? See
+[docs/guides/releasing.md](docs/guides/releasing.md) for the per-plugin release
+checklist.

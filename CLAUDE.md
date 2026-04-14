@@ -38,8 +38,6 @@
 │       ├── development.md        # Local plugin dev loop
 │       ├── skill-authoring.md    # SKILL.md template and authoring process
 │       └── releasing.md
-├── .launchpad/manifest.yml       # Launchpad eating own dog food
-├── PLAN.md                       # Active decisions log for ongoing changes
 ├── CHANGELOG.md
 ├── AGENTS.md
 ├── CLAUDE.md                     # ← you are here
@@ -98,5 +96,3 @@ Plugin dev setup is documented in `docs/guides/development.md`.
 - **CHANGELOG** entries are per-plugin under `## launchpad@X.Y.Z`,
   `## lifecycle@X.Y.Z`, `## philosophy@X.Y.Z` sections since plugins version
   independently.
-- **PLAN.md** tracks ongoing multi-step changes. When a plan is complete, move
-  the document to `docs/plans/` or delete it if fully captured in CHANGELOG.
